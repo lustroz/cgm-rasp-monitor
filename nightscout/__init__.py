@@ -1,6 +1,6 @@
 import requests
 import simplejson as json
-import pprint
+import database
 
 API_HOST = 'http://ns.dolucy.com:9237'
 headers = {'Authorization': 'Bearer '}
@@ -19,5 +19,8 @@ def req(path, query, method, data={}):
 
 def getEntries():
     resp = req('/api/v1/entries.json', '', 'GET')
-
-    print(resp.text)
+    parsed = json.loads(resp.text)
+    #print(json.dumps(parsed, indent=4, sort_keys=True))
+    for entry in parsed:
+        database.insertEntry('nightscout', entry['date'], entry['sgv'], entry['direction'])
+    

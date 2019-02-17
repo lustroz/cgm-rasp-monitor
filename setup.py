@@ -8,5 +8,5 @@ setup(
     author='do',
     author_email='dolucy.dev@gmail.com',
     packages=['cgm-rasp-monitor'],
-    install_requires=[],
+    install_requires=['requests'],
 )
