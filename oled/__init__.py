@@ -12,7 +12,8 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-font = ImageFont.truetype("arial.ttf", 20)
+boldFont = ImageFont.truetype("Lato-Bold.ttf", 50)
+regularFont = ImageFont.truetype("Lato-Regular", 18)
 
 width = 128
 height = 64
@@ -22,8 +23,17 @@ serial = spi(device=0, port=0, bus_speed_hz = 8000000, transfer_size = 4096, gpi
 
 device = sh1106(serial, rotate=2) #sh1106  
 
-def draw(origin, time, value, direction):
+def draw(origin, recTime, value, direction):
     x = 0
     top = -2
+    elapsed = int(time.time()) - recTime / 1000
+    print(elapsed)
+
+    if value < 100:
+        vX = x + 60
+    else:
+        vX = x + 40
+
     with canvas(device) as draw:
-        draw.text((x, top), 'nightscout',  font=font, fill=255)
+        draw.text((x, top), str(elapsed / 60) + ' min', font=regularFont, fill=255)
+        draw.text((vX, top), str(value),  font=boldFont, fill=255)
