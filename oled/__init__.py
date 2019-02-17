@@ -12,8 +12,9 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-boldFont = ImageFont.truetype("Lato-Bold.ttf", 50)
-regularFont = ImageFont.truetype("Lato-Regular", 18)
+boldFont = ImageFont.truetype("Lato-Bold.ttf", 40)
+regularFont = ImageFont.truetype("Lato-Regular", 15)
+thinFont = ImageFont.truetype("Lato-Thin", 10)
 
 width = 128
 height = 64
@@ -33,14 +34,14 @@ def draw(origin, recTime, value, direction, delta):
         dStr = '-' + str(-delta)
     else:
         dStr = 0
-    dStr += ' mg/dL'
 
     if value < 100:
-        vX = x + 60
+        vX = x + 73
     else:
-        vX = x + 40
+        vX = x + 53
 
     with canvas(device) as draw:
-        draw.text((x, top), str(elapsed / 60) + ' min', font=regularFont, fill=255)
-        draw.text((x, top+50), dStr, font=regularFont, fill=255)
-        draw.text((vX, top), str(value),  font=boldFont, fill=255)
+        draw.text((x, top+10), str(elapsed / 60)+' m', font=regularFont, fill=255)
+        draw.text((x, top+30), dStr, font=regularFont, fill=255)
+        draw.text((x+25, top+32), 'mg/dL', font=thinFont, fill=255)
+        draw.text((vX, top+5), str(value),  font=boldFont, fill=255)
