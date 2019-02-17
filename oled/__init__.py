@@ -12,7 +12,7 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-font = ImageFont.load_default()
+font = ImageFont.truetype("arial.ttf", 20)
 
 width = 128
 height = 64
@@ -24,6 +24,6 @@ device = sh1106(serial, rotate=2) #sh1106
 
 def draw(origin, time, value, direction):
     x = 0
-    top = 0
+    top = -2
     with canvas(device) as draw:
         draw.text((x, top), 'nightscout',  font=font, fill=255)
