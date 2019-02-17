@@ -26,4 +26,4 @@ def draw(origin, time, value, direction):
     x = 0
     top = 0
     with canvas(device) as draw:
-        draw.text((x, top),       origin,  font=font, fill=255)
+        draw.text((x, top), 'nightscout',  font=font, fill=255)

@@ -17,6 +17,6 @@ while True:
 
     if len(rows) > 0:
         latest = rows[0]
-        oled.draw(latest.origin, latest.time, latest.value, latest.direction)
+        oled.draw(latest[0], latest[1], latest[2], latest[3])
 
     time.sleep(60)
