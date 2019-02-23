@@ -12,7 +12,7 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-boldFont = ImageFont.truetype("Lato-Bold.ttf", 40)
+boldFont = ImageFont.truetype("Lato-Bold.ttf", 55)
 regularFont = ImageFont.truetype("Lato-Regular", 15)
 thinFont = ImageFont.truetype("Lato-Thin", 10)
 
@@ -40,8 +40,10 @@ def draw(origin, recTime, value, direction, delta):
     else:
         vX = x + 53
 
+    vX = 30
+
     with canvas(device) as draw:
         draw.text((x, top+10), str(elapsed / 60)+' m', font=regularFont, fill=255)
         draw.text((x, top+30), dStr, font=regularFont, fill=255)
-        draw.text((x+25, top+32), 'mg/dL', font=thinFont, fill=255)
-        draw.text((vX, top+5), str(value),  font=boldFont, fill=255)
+        #draw.text((x+25, top+32), 'mg/dL', font=thinFont, fill=255)
+        draw.text((vX, top), str(value),  font=boldFont, fill=255)
