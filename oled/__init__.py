@@ -27,7 +27,7 @@ device = sh1106(serial, rotate=2) #sh1106
 def draw(origin, recTime, value, direction, delta):
     x = 0
     top = -2
-    elapsed = int(time.time()) - recTime / 1000
+    elapsed = int(time.time()) - int(recTime / 1000)
     if delta > 0:
         dStr = '+' + str(delta)
     elif delta < 0:
@@ -36,7 +36,7 @@ def draw(origin, recTime, value, direction, delta):
         dStr = '='
 
     if value < 100:
-        vX = x + 50
+        vX = x + 60
     else:
         vX = x + 30
 
