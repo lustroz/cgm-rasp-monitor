@@ -36,11 +36,9 @@ def draw(origin, recTime, value, direction, delta):
         dStr = '='
 
     if value < 100:
-        vX = x + 73
+        vX = x + 50
     else:
-        vX = x + 53
-
-    vX = 30
+        vX = x + 30
 
     with canvas(device) as draw:
         draw.text((x, top+10), str(elapsed / 60)+' m', font=regularFont, fill=255)
