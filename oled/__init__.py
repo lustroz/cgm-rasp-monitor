@@ -33,6 +33,7 @@ def draw(origin, recTime, value, direction, delta):
     elif delta < 0:
         dStr = '-' + str(-delta)
     else:
+        dStr = '='
 
     if value < 100:
         vX = x + 60
