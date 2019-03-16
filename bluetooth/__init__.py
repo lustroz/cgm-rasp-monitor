@@ -1,7 +1,10 @@
 from bluetooth import *
+import os
 
-def waiting():
+async def listen():
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"
+    
+    os.system("echo 'discoverable on\nquit' | bluetoothctl")
 
     serverSock=BluetoothSocket(RFCOMM)
     serverSock.bind(('',PORT_ANY))

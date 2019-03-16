@@ -2,8 +2,10 @@ import nightscout
 import database
 import time
 import oled
+import bluetooth
 import logging
 import logging.handlers
+import asyncio
 
 logger = logging.getLogger('cgm')
 logger.setLevel(logging.DEBUG)
@@ -17,7 +19,8 @@ logger.addHandler(fileHandler)
 
 database.createTable()
 
-def main():
+async def main():
+
     while True:
         # print('\n***** retrieve server data *****\n')
         nightscout.getEntries()
@@ -41,6 +44,9 @@ def main():
 
 
 try:
-    main()
+    loop = asyncio.get_event_loop()
+
+    loop.run_until_complete(asyncio.gather(bluetooth.listen(), main()))
+
 except Exception as e:
     logger.exception('main crashed. Error: %s', e)
