@@ -11,7 +11,7 @@ logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('[%(levelname)s|%(filename)s:%(lineno)s] %(asctime)s > %(message)s')
 
 file_max_bytes = 10 * 1024 * 1024
-fileHandler = logging.handlers.RotatingFileHandler(filename='./log/cgm.log', maxBytes=file_max_bytes, backupCount=10)
+fileHandler = logging.handlers.RotatingFileHandler(filename='./cgm.log', maxBytes=file_max_bytes, backupCount=10)
 fileHandler.setFormatter(formatter)
 logger.addHandler(fileHandler)
 
