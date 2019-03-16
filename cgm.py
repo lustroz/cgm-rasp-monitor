@@ -17,6 +17,10 @@ fileHandler = logging.handlers.RotatingFileHandler(filename='./cgm.log', maxByte
 fileHandler.setFormatter(formatter)
 logger.addHandler(fileHandler)
 
+streamHandler = logging.StreamHandler()
+streamHandler.setFormatter(formatter)
+logger.addHandler(streamHandler)
+
 database.createTable()
 
 async def main():
