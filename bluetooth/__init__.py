@@ -1,8 +1,26 @@
 from bluetooth import *
 import os
 import logging
+import wifi
 
 logger = logging.getLogger('cgm')
+
+def handleData(clientSock, data):
+    logger.info("received [%s]" % data)
+    arr = data.split(':')
+    if len(arr) < 2:
+        return
+
+    cmd = arr[0]
+    param = arr[1]
+
+    if cmd == 'wifi_list':
+        output = wifi.getApList()
+        clientSock.send(output)
+
+    elif cmd == 'connect_wifi':
+        wifi.connect(param)
+
 
 async def listen():
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"
@@ -26,12 +44,14 @@ async def listen():
         try:
             data = clientSock.recv(1024)
             if len(data) == 0: break
-            logger.info("received [%s]" % data)
+            handleData(data)
+
         except IOError:
             print("disconnected")
             clientSock.close()
             serverSock.close()
             break
+
         except KeyboardInterrupt:
             print("disconnected")
             clientSock.close()

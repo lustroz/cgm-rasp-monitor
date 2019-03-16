@@ -24,6 +24,13 @@ serial = spi(device=0, port=0, bus_speed_hz = 8000000, transfer_size = 4096, gpi
 
 device = sh1106(serial, rotate=2) #sh1106  
 
+def drawState(text):
+    x = 0
+    top = 0
+
+    with canvas(device) as draw:
+        draw.text((x, top), text, font=regularFont, fill=200)
+
 def draw(origin, recTime, value, direction, delta):
     x = 0
     top = -2
