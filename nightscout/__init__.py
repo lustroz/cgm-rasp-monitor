@@ -1,6 +1,5 @@
 import requests
 import simplejson as json
-import database
 import logging
 
 logger = logging.getLogger('cgm')
@@ -20,11 +19,11 @@ def req(path, query, method, data={}):
     else:
         return requests.post(url, headers=headers, data=data)
 
-def getEntries():
+def getEntries(db):
     resp = req('/api/v1/entries.json', '', 'GET')
     parsed = json.loads(resp.text)
     # logger.info(json.dumps(parsed, indent=4, sort_keys=True))
     for entry in parsed:
         if entry['type'] == 'sgv':
-            database.insertEntry('nightscout', entry['date'], entry['sgv'], entry['direction'])
+            db.insertEntry('nightscout', entry['date'], entry['sgv'], entry['direction'])
     

@@ -10,12 +10,13 @@ class Data:
     def __init__(self):
         self.mode = Data.Nightscout
 
-    def fetchData(self, state):
-        if not wifi.checkNetwork():
+    def fetchData(self, state, db):
+        if wifi.checkNetwork():
+            if self.mode == Data.DexcomShare:
+                pass
+            else:
+                nightscout.getEntries(db)
+        else:
             state.setState(state.NoInternet)
             
-        if self.mode == Data.DexcomShare:
-            pass
-        else:
-            nightscout.getEntries()
-
+        

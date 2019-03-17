@@ -29,12 +29,13 @@ class State:
             if delta > 3:
                 self.state = State.DisplayValue
 
-    def process(self):
+    def process(self, db):
+        print('process')
         if self.state == State.NoInternet:
             oled.drawState('No Internet')
 
         elif self.state == State.DisplayValue:
-            rows = database.fetchEntries()
+            rows = db.fetchEntries()
 
             if len(rows) > 1:
                 delta = rows[0][3] - rows[1][3]

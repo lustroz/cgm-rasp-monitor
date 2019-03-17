@@ -22,7 +22,7 @@ def handleData(clientSock, data):
         wifi.connect(param)
 
 
-async def listen():
+def start():
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"
     
     os.system("echo 'discoverable on\nquit' | bluetoothctl")

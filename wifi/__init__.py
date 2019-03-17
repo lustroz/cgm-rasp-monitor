@@ -6,7 +6,7 @@ logger = logging.getLogger('cgm')
 
 def checkNetwork():
     try:
-        urllib.urlopen('http://google.com')
+        urllib.request.urlopen('http://google.com')
         return True
     except:
         return False
