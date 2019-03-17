@@ -8,6 +8,7 @@ import bluetooth
 import logging
 import logging.handlers
 import asyncio
+import threading
 
 logger = logging.getLogger('cgm')
 logger.setLevel(logging.DEBUG)
@@ -25,17 +26,25 @@ logger.addHandler(streamHandler)
 
 database.createTable()
 
-async def main():
+_state = state.State()
+_data = data.Data()
 
-    while True:
-        state.processCurrentState()
-        
+class AsyncTask:
+    def fetchData(self):
+        _data.fetchData(_state)
+        threading.Timer(30, self.fetchData).start()
+
+    def process(self):
+        _state.process()
+        threading.Timer(_state.interval, self.process).start()
+       
 try:
+    task = AsyncTask()
+    task.fetchData()
+    task.process()
+    
     loop = asyncio.get_event_loop()
-
-    tasks = asyncio.gather(bluetooth.listen(), data.fetchData(), main())
-
-    loop.run_until_complete(tasks)
+    loop.run_until_complete(asyncio.wait([bluetooth.listen()]))
 
 except Exception as e:
     logger.exception('main crashed. Error: %s', e)

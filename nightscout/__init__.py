@@ -23,7 +23,7 @@ def req(path, query, method, data={}):
 def getEntries():
     resp = req('/api/v1/entries.json', '', 'GET')
     parsed = json.loads(resp.text)
-    logger.info(json.dumps(parsed, indent=4, sort_keys=True))
+    # logger.info(json.dumps(parsed, indent=4, sort_keys=True))
     for entry in parsed:
         if entry['type'] == 'sgv':
             database.insertEntry('nightscout', entry['date'], entry['sgv'], entry['direction'])

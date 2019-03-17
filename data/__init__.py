@@ -2,22 +2,20 @@ import enum
 import nightscout
 import time
 import wifi
-import state
 
-class Mode(enum.Enum):
+class Data:
     DexcomShare = 0
     Nightscout = 1
 
-mode = Mode.Nightscout
+    def __init__(self):
+        self.mode = Data.Nightscout
 
-async def fetchData():
-    while True:
+    def fetchData(self, state):
         if not wifi.checkNetwork():
-            state.setState(state.State.NoInternet)
+            state.setState(state.NoInternet)
             
-        if mode == Mode.DexcomShare:
-            print('dexcom')
+        if self.mode == Data.DexcomShare:
+            pass
         else:
             nightscout.getEntries()
 
-        time.sleep(30)
