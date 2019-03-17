@@ -14,7 +14,7 @@ class State:
     EmergencyValue = 11
 
     def __init__(self):
-        self.state = State.DisplayValue
+        self.state = State.Unknown
         self.interval = defaultInterval
         self.settingTime = 0
 
@@ -25,7 +25,7 @@ class State:
 
     def restoreState(self):
         if self.state == State.Unknown:
-            delta = time.time() - settingTime
+            delta = time.time() - self.settingTime
             if delta > 3:
                 self.state = State.DisplayValue
 
