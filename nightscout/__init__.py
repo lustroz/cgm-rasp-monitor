@@ -1,4 +1,6 @@
 import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 import simplejson as json
 import logging
 
@@ -13,6 +15,12 @@ def req(path, query, method, data={}):
     # print('Request URL: %s' % url)
     # print('Headers: %s' % headers)
     # print('QueryString: %s' % query)
+
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
 
     if method == 'GET':
         return requests.get(url, headers=headers)
