@@ -7,19 +7,19 @@ logger = logging.getLogger('cgm')
 
 def handleData(clientSock, data):
     logger.info("received [%s]" % data)
-    arr = data.split(':')
+    arr = data.split(b':')
     if len(arr) < 2:
         return
 
     cmd = arr[0]
     param = arr[1]
 
-    if cmd == 'wifi_list':
+    if cmd == b'wifi_list':
         output = wifi.getApList()
         clientSock.send(output)
 
-    elif cmd == 'connect_wifi':
-        phrase = param.split(';')
+    elif cmd == b'connect_wifi':
+        phrase = param.split(b';')
         wifi.connect(phrase[0], phrase[1])
 
 
