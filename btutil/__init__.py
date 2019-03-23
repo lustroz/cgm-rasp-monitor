@@ -41,7 +41,6 @@ def start():
     logger.info("accepted")
 
     while True:
-        logger.info("Accepted connection from ", clientInfo)
         try:
             data = clientSock.recv(1024)
             if len(data) == 0: continue
