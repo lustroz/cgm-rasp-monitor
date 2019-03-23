@@ -46,11 +46,11 @@ def listen(state, cond):
             data = clientSock.recv(1024)
             if len(data) == 0: continue
 
-            with cond:
-                state.setState(state.BluetoothCommand)
-                cond.notifyAll()
-
+            state.setState(state.BluetoothCommand)
             handleData(clientSock, data)
+
+            with cond:
+                cond.notifyAll()
 
         except IOError:
             print("disconnected")

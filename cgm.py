@@ -43,15 +43,16 @@ class AsyncTask:
         db.createTable()
 
         while True:
+            _data.fetchData(_state, db)
+            _state.process(db)
+
             with self.cond:
-                _data.fetchData(_state, db)
-                _state.process(db)
                 self.cond.wait()            
 
     def notifier(self):
         while True:
-            with self.cond:
-                time.sleep(self.interval)
+            time.sleep(self.interval)
+            with self.cond:               
                 self.cond.notifyAll()
        
 try:
