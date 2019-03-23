@@ -48,7 +48,7 @@ class State:
             oled.drawState('No Internet')
 
         elif s == State.BluetoothCommand:
-            oled.drawState('Bluetooth command')
+            oled.drawState('Bluetooth\ncommand')
 
         elif s == State.DisplayValue:
             rows = db.fetchEntries()
