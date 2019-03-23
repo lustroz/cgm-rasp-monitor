@@ -34,5 +34,4 @@ def getEntries(state, db):
     for entry in parsed:
         if entry['type'] == 'sgv':
             db.insertEntry('nightscout', entry['date'], entry['sgv'], entry['direction'])
-            state.setState(state.DisplayValue)
     
