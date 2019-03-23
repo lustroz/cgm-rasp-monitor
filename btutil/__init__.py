@@ -45,9 +45,11 @@ def listen(state, cond):
         try:
             data = clientSock.recv(1024)
             if len(data) == 0: continue
-            state.setState(state.BluetoothCommand)
-            cond.notifyAll()
-            
+
+            with cond:
+                state.setState(state.BluetoothCommand)
+                cond.notifyAll()
+
             handleData(clientSock, data)
 
         except IOError:
