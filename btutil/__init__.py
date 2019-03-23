@@ -19,13 +19,14 @@ def handleData(clientSock, data):
         clientSock.send(output)
 
     elif cmd == 'connect_wifi':
-        wifi.connect(param)
+        phrase = param.split(';')
+        wifi.connect(phrase[0], phrase[1])
 
 
 def start():
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"
     
-    os.system("echo 'discoverable on\nquit' | bluetoothctl")
+    # os.system("echo 'discoverable on\nquit' | bluetoothctl")
 
     serverSock=BluetoothSocket(RFCOMM)
     serverSock.bind(('',PORT_ANY))
@@ -43,8 +44,8 @@ def start():
         logger.info("Accepted connection from ", clientInfo)
         try:
             data = clientSock.recv(1024)
-            if len(data) == 0: break
-            handleData(data)
+            if len(data) == 0: continue
+            handleData(clientSock, data)
 
         except IOError:
             print("disconnected")

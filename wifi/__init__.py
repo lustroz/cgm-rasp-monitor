@@ -17,6 +17,7 @@ def getApList():
     return output
 
 
-def connect(apName):
-    print('connect')
+def connect(ssid, password):
+    subprocess.check_output('wpa_passphrase "'+ssid+'" '+password+' >> /etc/wpa_supplicant/wpa_supplicant.conf', universal_newlines=True)
+
 
