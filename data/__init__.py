@@ -15,7 +15,7 @@ class Data:
             if self.mode == Data.DexcomShare:
                 pass
             else:
-                nightscout.getEntries(db)
+                nightscout.getEntries(state, db)
         else:
             state.setState(state.NoInternet)
             

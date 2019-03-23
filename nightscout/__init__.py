@@ -27,11 +27,12 @@ def req(path, query, method, data={}):
     else:
         return requests.post(url, headers=headers, data=data)
 
-def getEntries(db):
+def getEntries(state, db):
     resp = req('/api/v1/entries.json', '', 'GET')
     parsed = json.loads(resp.text)
     # logger.info(json.dumps(parsed, indent=4, sort_keys=True))
     for entry in parsed:
         if entry['type'] == 'sgv':
             db.insertEntry('nightscout', entry['date'], entry['sgv'], entry['direction'])
+            state.setState(state.DisplayValue)
     

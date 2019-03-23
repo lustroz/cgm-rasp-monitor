@@ -3,6 +3,10 @@ import time
 import nightscout
 import database
 import oled
+import logging
+from threading import Lock
+
+logger = logging.getLogger('cgm')
 
 defaultInterval = 30
 emergencyInterval = 1
@@ -10,6 +14,7 @@ emergencyInterval = 1
 class State:
     Unknown = 0
     NoInternet = 1
+    BluetoothCommand = 2
     DisplayValue = 10
     EmergencyValue = 11
 
@@ -17,24 +22,37 @@ class State:
         self.state = State.Unknown
         self.interval = defaultInterval
         self.settingTime = 0
+        self.lock = Lock()
 
     def setState(self, s):
-        self.state = s
-        self.interval = 0
-        self.settingTime = time.time()
+        with self.lock:
+            self.state = s
+            self.interval = 0
+            self.settingTime = time.time()
 
     def restoreState(self):
-        if self.state == State.Unknown:
+        with self.lock:
+            if self.state == State.DisplayValue or self.state == State.EmergencyValue:
+                pass
+
             delta = time.time() - self.settingTime
             if delta > 3:
                 self.state = State.DisplayValue
 
     def process(self, db):
-        print('process')
-        if self.state == State.NoInternet:
-            oled.drawState('No Internet')
+        s = State.Unknown
 
-        elif self.state == State.DisplayValue:
+        with self.lock:
+            s = self.state
+
+        # logger.info('process')
+        if s == State.NoInternet:
+            oled.drawState('No Internet')
+            
+        elif s == State.BluetoothCommand:
+            oled.drawState('Bluetooth command')
+
+        elif s == State.DisplayValue:
             rows = db.fetchEntries()
 
             if len(rows) > 1:
@@ -51,7 +69,7 @@ class State:
 
         self.restoreState()
 
-        if self.state == State.EmergencyValue:
+        if s == State.EmergencyValue:
             self.interval = emergencyInterval
         else:
             self.interval = defaultInterval

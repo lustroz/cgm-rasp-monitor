@@ -29,6 +29,9 @@ _data = data.Data()
 
 class AsyncTask:
 
+    def bluetooth(self):
+        btutil.start(_state)
+
     def process(self):
         db = database.Database()
         db.createTable()
@@ -43,7 +46,7 @@ try:
     task = AsyncTask()
 
     threads = []
-    t = threading.Thread(target=btutil.start)
+    t = threading.Thread(target=task.bluetooth)
     threads.append(t)
     t = threading.Thread(target=task.process)
     threads.append(t)

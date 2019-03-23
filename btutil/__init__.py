@@ -23,7 +23,7 @@ def handleData(clientSock, data):
         wifi.connect(phrase[0], phrase[1])
 
 
-def start():
+def start(state):
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"
     
     # os.system("echo 'discoverable on\nquit' | bluetoothctl")
@@ -44,6 +44,7 @@ def start():
         try:
             data = clientSock.recv(1024)
             if len(data) == 0: continue
+            state.setState(state.BluetoothCommand)
             handleData(clientSock, data)
 
         except IOError:
