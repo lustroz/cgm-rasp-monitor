@@ -2,6 +2,7 @@ from bluetooth import *
 import os
 import logging
 import wifi
+import time
 
 logger = logging.getLogger('cgm')
 
@@ -23,7 +24,7 @@ def handleData(clientSock, data):
         wifi.connect(phrase[0], phrase[1])
 
 
-def start(state):
+def listen(state):
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"
     
     # os.system("echo 'discoverable on\nquit' | bluetoothctl")
@@ -51,11 +52,13 @@ def start(state):
             print("disconnected")
             clientSock.close()
             serverSock.close()
-            break
+            return
 
         except KeyboardInterrupt:
             print("disconnected")
             clientSock.close()
             serverSock.close()
-            break
+            return
+        
+        time.sleep(1)
                                              

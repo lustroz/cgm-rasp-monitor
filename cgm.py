@@ -30,7 +30,11 @@ _data = data.Data()
 class AsyncTask:
 
     def bluetooth(self):
-        btutil.start(_state)
+        while True:
+            btutil.listen(_state)
+
+            time.sleep(10)
+
 
     def process(self):
         db = database.Database()
