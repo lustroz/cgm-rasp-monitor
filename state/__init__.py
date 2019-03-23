@@ -20,20 +20,18 @@ class State:
 
     def __init__(self):
         self.state = State.Unknown
-        self.interval = defaultInterval
         self.settingTime = 0
         self.lock = Lock()
 
     def setState(self, s):
         with self.lock:
             self.state = s
-            self.interval = 0
             self.settingTime = time.time()
 
     def restoreState(self):
         with self.lock:
             if self.state == State.DisplayValue or self.state == State.EmergencyValue:
-                pass
+                return
 
             delta = time.time() - self.settingTime
             if delta > 3:
@@ -48,7 +46,7 @@ class State:
         # logger.info('process')
         if s == State.NoInternet:
             oled.drawState('No Internet')
-            
+
         elif s == State.BluetoothCommand:
             oled.drawState('Bluetooth command')
 
@@ -68,10 +66,5 @@ class State:
             oled.drawState('Unknown')
 
         self.restoreState()
-
-        if s == State.EmergencyValue:
-            self.interval = emergencyInterval
-        else:
-            self.interval = defaultInterval
 
 
