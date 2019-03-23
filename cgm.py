@@ -29,12 +29,14 @@ _data = data.Data()
 
 class AsyncTask:
 
+    def __init__(self):
+        self.cond = threading.Condition()
+        self.interval = 30
+
     def bluetooth(self):
         while True:
-            btutil.listen(_state)
-
-            time.sleep(10)
-
+            btutil.listen(_state, self.cond)
+            time.sleep(2)
 
     def process(self):
         db = database.Database()
@@ -43,8 +45,12 @@ class AsyncTask:
         while True:
             _data.fetchData(_state, db)
             _state.process(db)
+            self.cond.wait()            
 
-            time.sleep(_state.interval)
+    def notifier(self):
+        while True:
+            time.sleep(self.interval)
+            self.cond.notifyAll()
        
 try:
     task = AsyncTask()
@@ -54,13 +60,14 @@ try:
     threads.append(t)
     t = threading.Thread(target=task.process)
     threads.append(t)
+    t = threading.Thread(target=task.notifier)
+    threads.append(t)
 
     for t in threads:
         t.start()
 
     for t in threads:
         t.join()
-
 
 except Exception as e:
     logger.exception('main crashed. Error: %s', e)
