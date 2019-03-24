@@ -20,6 +20,7 @@ class State:
     def __init__(self):
         self.state = State.Unknown
         self.emergency = False
+        self.dimmed = False
         self.settingTime = 0
         self.lock = Lock()
 
@@ -38,8 +39,6 @@ class State:
                 self.state = State.DisplayValue
 
     def process(self, db):
-        s = State.Unknown
-
         with self.lock:
             s = self.state
 
@@ -65,17 +64,19 @@ class State:
                 color = 255
 
                 with self.lock:
-                    if val < 80 or val > 170:
+                    if val < 80 or val > 100:
                         self.emergency = True
 
-                        if time.time() % 2 == 0:
-                            color = 255
+                        if self.dimmed:
+                            color = 0
                         else:
-                            color = 50
+                            color = 255
+
+                        self.dimmed = not self.dimmed
                     else:
                         self.emergency = False
 
-                oled.draw(latest[1], latest[2], val, latest[4], delta, 255)
+                oled.draw(latest[1], latest[2], val, latest[4], delta, color)
 
         else: 
             oled.drawState('Unknown')
@@ -87,7 +88,7 @@ class State:
             e = self.emergency
 
         if e:
-            time.sleep(emegencyInterval)
+            time.sleep(emergencyInterval)
         else:
             time.sleep(defaultInterval)
 
