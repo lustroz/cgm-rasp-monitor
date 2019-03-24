@@ -23,9 +23,9 @@ def req(path, query, method, data={}):
     session.mount('https://', adapter)
 
     if method == 'GET':
-        return requests.get(url, headers=headers)
+        return session.get(url, headers=headers)
     else:
-        return requests.post(url, headers=headers, data=data)
+        return session.post(url, headers=headers, data=data)
 
 def getEntries(state, db):
     resp = req('/api/v1/entries.json', '', 'GET')
