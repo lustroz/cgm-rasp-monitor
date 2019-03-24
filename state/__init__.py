@@ -82,7 +82,7 @@ class State:
 
         self.restoreState()
 
-    def sleep():
+    def sleep(self):
         with self.lock:
             e = self.emergency
 
