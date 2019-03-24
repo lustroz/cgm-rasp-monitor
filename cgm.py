@@ -51,7 +51,8 @@ class AsyncTask:
 
     def notifier(self):
         while True:
-            time.sleep(self.interval)
+            _state.sleep()
+            
             with self.cond:               
                 self.cond.notifyAll()
        

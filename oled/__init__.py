@@ -31,7 +31,7 @@ def drawState(text):
     with canvas(device) as draw:
         draw.text((x, top), text, font=regularFont, fill=200)
 
-def draw(source, recTime, value, direction, delta):
+def draw(source, recTime, value, direction, delta, color):
     x = 0
     top = -2
 
@@ -54,8 +54,8 @@ def draw(source, recTime, value, direction, delta):
         vX = x + 30
 
     with canvas(device) as draw:
-        draw.text((x, top+10), str(int(elapsed / 60))+' m', font=regularFont, fill=255)
-        draw.text((x, top+30), dStr, font=regularFont, fill=255)
-        #draw.text((x+25, top+32), 'mg/dL', font=thinFont, fill=255)
-        draw.text((vX, top), str(value),  font=boldFont, fill=255)
-        draw.text((x, top+54), src, font=thinFont, fill=255)
+        draw.text((x, top+10), str(int(elapsed / 60))+' m', font=regularFont, fill=color)
+        draw.text((x, top+30), dStr, font=regularFont, fill=color)
+        # draw.text((x+25, top+32), 'mg/dL', font=thinFont, fill=color)
+        draw.text((vX, top), str(value),  font=boldFont, fill=color)
+        draw.text((x, top+54), src, font=thinFont, fill=color)

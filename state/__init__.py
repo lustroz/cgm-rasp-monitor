@@ -16,10 +16,10 @@ class State:
     NoInternet = 1
     BluetoothCommand = 2
     DisplayValue = 10
-    EmergencyValue = 11
 
     def __init__(self):
         self.state = State.Unknown
+        self.emergency = False
         self.settingTime = 0
         self.lock = Lock()
 
@@ -30,7 +30,7 @@ class State:
 
     def restoreState(self):
         with self.lock:
-            if self.state == State.DisplayValue or self.state == State.EmergencyValue:
+            if self.state == State.DisplayValue:
                 return
 
             delta = time.time() - self.settingTime
@@ -60,11 +60,35 @@ class State:
 
             if len(rows) > 0:
                 latest = rows[0]
-                oled.draw(latest[1], latest[2], latest[3], latest[4], delta)
+                val = latest[3]
+
+                color = 255
+
+                with self.lock:
+                    if val < 80 or val > 170:
+                        self.emergency = True
+
+                        if time.time() % 2 == 0:
+                            color = 255
+                        else:
+                            color = 50
+                    else:
+                        self.emergency = False
+
+                oled.draw(latest[1], latest[2], val, latest[4], delta, 255)
 
         else: 
             oled.drawState('Unknown')
 
         self.restoreState()
+
+    def sleep():
+        with self.lock:
+            e = self.emergency
+
+        if e:
+            time.sleep(emegencyInterval)
+        else:
+            time.sleep(defaultInterval)
 
 
