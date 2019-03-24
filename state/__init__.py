@@ -64,7 +64,7 @@ class State:
                 color = 255
 
                 with self.lock:
-                    if val < 80 or val > 100:
+                    if val < 80 or val > 170:
                         self.emergency = True
 
                         if self.dimmed:
