@@ -68,7 +68,7 @@ class State:
                         self.emergency = True
 
                         if self.dimmed:
-                            color = 0
+                            color = 50
                         else:
                             color = 255
 
