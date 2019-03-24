@@ -1,4 +1,5 @@
 import subprocess
+import requests
 import urllib
 import logging
 
@@ -6,7 +7,12 @@ logger = logging.getLogger('cgm')
 
 def checkNetwork():
     try:
-        urllib.request.urlopen('http://google.com')
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+        session.get('http://google.com')
         return True
     except:
         return False
