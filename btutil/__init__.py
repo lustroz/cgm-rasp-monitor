@@ -33,7 +33,8 @@ def handleData(clientSock, data):
     elif cmd == b'nightscout':
         pass
 
-    else cmd == b'dexcomshare':
+    elif cmd == b'dexcomshare':
+        phrase = param.split(b';')
         pass
 
 def listen(state, cond):

@@ -54,8 +54,8 @@ def draw(source, recTime, value, direction, delta):
         vX = x + 30
 
     with canvas(device) as draw:
-        draw.text((x, top), src, font=regularFont, fill=255)
         draw.text((x, top+10), str(int(elapsed / 60))+' m', font=regularFont, fill=255)
         draw.text((x, top+30), dStr, font=regularFont, fill=255)
         #draw.text((x+25, top+32), 'mg/dL', font=thinFont, fill=255)
         draw.text((vX, top), str(value),  font=boldFont, fill=255)
+        draw.text((x, top+54), src, font=thinFont, fill=255)
