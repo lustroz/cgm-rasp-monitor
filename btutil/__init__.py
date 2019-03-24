@@ -17,8 +17,8 @@ def handleData(clientSock, data):
     param = arr[1]
 
     if cmd == b'wifi_list':
-        output = wifi.getApList()
-        clientSock.send(output)
+        output = wifi.getApList().encode()
+        clientSock.send(b'wifi_list:' + output)
 
     elif cmd == b'connect_wifi':
         phrase = param.split(b';')

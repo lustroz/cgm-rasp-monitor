@@ -62,9 +62,10 @@ class State:
                 val = latest[3]
 
                 color = 255
+                elapsed = int(time.time()) - latest[2] / 1000
 
                 with self.lock:
-                    if val < 80 or val > 170:
+                    if val < 80 or val > 170 or (elapsed / 60) > 15:
                         self.emergency = True
 
                         if self.dimmed:
@@ -76,7 +77,7 @@ class State:
                     else:
                         self.emergency = False
 
-                oled.draw(latest[1], latest[2], val, latest[4], delta, color)
+                oled.draw(latest[1], elapsed, val, latest[4], delta, color)
 
         else: 
             oled.drawState('Unknown')

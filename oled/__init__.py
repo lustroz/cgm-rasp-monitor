@@ -31,7 +31,7 @@ def drawState(text):
     with canvas(device) as draw:
         draw.text((x, top), text, font=regularFont, fill=200)
 
-def draw(source, recTime, value, direction, delta, color):
+def draw(source, elapsed, value, direction, delta, color):
     x = 0
     top = -2
 
@@ -40,7 +40,6 @@ def draw(source, recTime, value, direction, delta, color):
     else:
         src = 'DexcomShare'
 
-    elapsed = int(time.time()) - recTime / 1000
     if delta > 0:
         dStr = '+' + str(delta)
     elif delta < 0:
