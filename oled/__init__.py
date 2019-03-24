@@ -58,4 +58,4 @@ def draw(source, recTime, value, direction, delta, color):
         draw.text((x, top+30), dStr, font=regularFont, fill=color)
         # draw.text((x+25, top+32), 'mg/dL', font=thinFont, fill=color)
         draw.text((vX, top), str(value),  font=boldFont, fill=color)
-        draw.text((x, top+54), src, font=thinFont, fill=color)
+        draw.text((x, top+58), src, font=thinFont, fill=color)
