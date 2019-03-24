@@ -36,9 +36,9 @@ def draw(source, recTime, value, direction, delta, color):
     top = -2
 
     if source == 'nightscout':
-        src = 'N'
+        src = 'Nightscout'
     else:
-        src = 'D'
+        src = 'DexcomShare'
 
     elapsed = int(time.time()) - recTime / 1000
     if delta > 0:
