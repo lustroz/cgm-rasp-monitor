@@ -31,9 +31,15 @@ def drawState(text):
     with canvas(device) as draw:
         draw.text((x, top), text, font=regularFont, fill=200)
 
-def draw(origin, recTime, value, direction, delta):
+def draw(source, recTime, value, direction, delta):
     x = 0
     top = -2
+
+    if source == 'nightscout':
+        src = 'N'
+    else:
+        src = 'D'
+
     elapsed = int(time.time()) - recTime / 1000
     if delta > 0:
         dStr = '+' + str(delta)
@@ -48,6 +54,7 @@ def draw(origin, recTime, value, direction, delta):
         vX = x + 30
 
     with canvas(device) as draw:
+        draw.text((x, top), src, font=regularFont, fill=255)
         draw.text((x, top+10), str(int(elapsed / 60))+' m', font=regularFont, fill=255)
         draw.text((x, top+30), dStr, font=regularFont, fill=255)
         #draw.text((x+25, top+32), 'mg/dL', font=thinFont, fill=255)

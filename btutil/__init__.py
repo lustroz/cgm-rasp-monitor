@@ -8,6 +8,7 @@ logger = logging.getLogger('cgm')
 
 def handleData(clientSock, data):
     logger.info("received [%s]" % data)
+
     arr = data.split(b':')
     if len(arr) < 2:
         return
@@ -22,7 +23,18 @@ def handleData(clientSock, data):
     elif cmd == b'connect_wifi':
         phrase = param.split(b';')
         wifi.connect(phrase[0], phrase[1])
+    
+    elif cmd == b'reboot':
+        os.system('shutdown -r now')
 
+    elif cmd == b'source_change':
+        pass
+
+    elif cmd == b'nightscout':
+        pass
+
+    else cmd == b'dexcomshare':
+        pass
 
 def listen(state, cond):
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"
