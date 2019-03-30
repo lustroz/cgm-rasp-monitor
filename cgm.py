@@ -83,7 +83,7 @@ class AsyncTask:
 
     def keyHandler(self):
         while True:
-            if GPIO.input(KEY1_PIN):
+            if not GPIO.input(KEY1_PIN):
                 _state.setKeyState(KEY1_PIN)
        
 try:

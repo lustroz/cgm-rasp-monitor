@@ -107,6 +107,7 @@ class State:
         with self.lock:
             if self.shouldReboot:
                 os.system("shutdown -r now")
+                self.shouldReboot = False
 
     def sleep(self):
         with self.lock:
