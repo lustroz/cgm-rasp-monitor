@@ -96,6 +96,8 @@ try:
     threads.append(t)
     t = threading.Thread(target=task.notifier)
     threads.append(t)
+    t = threading.Thread(target=task.keyHandler)
+    threads.append(t)
 
     for t in threads:
         t.start()
