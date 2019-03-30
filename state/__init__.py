@@ -37,7 +37,7 @@ class State:
         self.dimmed = False
         self.settingTime = 0
         self.lock = Lock()
-        self.shouldReboot = false
+        self.shouldReboot = False
 
     def setState(self, s):
         with self.lock:
