@@ -59,32 +59,44 @@ class AsyncTask:
         self.interval = 30
 
     def bluetooth(self):
-        while True:
-            btutil.listen(_state, self.cond)
-            time.sleep(2)
+        try:
+            while True:
+                btutil.listen(_state, self.cond)
+                time.sleep(2)
+        except Exception as e:
+            logger.exception('bluetooth crashed. Error: %s', e)
 
     def process(self):
-        db = database.Database()
-        db.createTable()
+        try:
+            db = database.Database()
+            db.createTable()
 
-        while True:
-            _data.fetchData(_state, db)
-            _state.process(db)
+            while True:
+                _data.fetchData(_state, db)
+                _state.process(db)
 
-            with self.cond:
-                self.cond.wait()            
+                with self.cond:
+                    self.cond.wait()     
+         except Exception as e:
+            logger.exception('process crashed. Error: %s', e)       
 
     def notifier(self):
-        while True:
-            _state.sleep()
-            
-            with self.cond:               
-                self.cond.notifyAll()
+        try:
+            while True:
+                _state.sleep()
+                
+                with self.cond:               
+                    self.cond.notifyAll()
+         except Exception as e:
+            logger.exception('notifier crashed. Error: %s', e)
 
     def keyHandler(self):
-        while True:
+        try:
+            while True:
             if not GPIO.input(KEY1_PIN):
                 _state.setKeyState(KEY1_PIN)
+         except Exception as e:
+            logger.exception('keyHandler crashed. Error: %s', e)
        
 try:
     task = AsyncTask()
