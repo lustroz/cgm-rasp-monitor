@@ -5,11 +5,25 @@ import database
 import oled
 import logging
 from threading import Lock
+import os
 
 logger = logging.getLogger('cgm')
 
 defaultInterval = 30
 emergencyInterval = 1
+
+#GPIO define
+RST_PIN        = 25
+CS_PIN         = 8
+DC_PIN         = 24
+KEY_UP_PIN     = 6 
+KEY_DOWN_PIN   = 19
+KEY_LEFT_PIN   = 5
+KEY_RIGHT_PIN  = 26
+KEY_PRESS_PIN  = 13
+KEY1_PIN       = 21
+KEY2_PIN       = 20
+KEY3_PIN       = 16
 
 class State:
     Unknown = 0
@@ -23,6 +37,7 @@ class State:
         self.dimmed = False
         self.settingTime = 0
         self.lock = Lock()
+        self.shouldReboot = false
 
     def setState(self, s):
         with self.lock:
@@ -37,6 +52,11 @@ class State:
             delta = time.time() - self.settingTime
             if delta > 3:
                 self.state = State.DisplayValue
+
+    def setKeyState(self, key):
+        with self.lock:
+            if key == KEY1_PIN:
+                self.shouldReboot = True
 
     def process(self, db):
         with self.lock:
@@ -83,6 +103,10 @@ class State:
             oled.drawState('Unknown')
 
         self.restoreState()
+
+        with self.lock:
+            if self.shouldReboot:
+                os.system("shutdown -r now")
 
     def sleep(self):
         with self.lock:

@@ -3,7 +3,6 @@ from luma.core.render import canvas
 from luma.core import lib
 
 from luma.oled.device import sh1106
-import RPi.GPIO as GPIO
 
 import time
 import subprocess
