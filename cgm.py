@@ -86,7 +86,8 @@ class AsyncTask:
             while True:
                 _state.sleep()
                 
-                self.cond.notifyAll()
+                with self.cond:
+                    self.cond.notifyAll()
 
         except Exception as e:
             logger.exception('notifier crashed. Error: %s', e)
