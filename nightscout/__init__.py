@@ -16,16 +16,20 @@ def req(path, query, method, data={}):
     # print('Headers: %s' % headers)
     # print('QueryString: %s' % query)
 
-    session = requests.Session()
-    retry = Retry(connect=3, backoff_factor=0.5)
-    adapter = HTTPAdapter(max_retries=retry)
-    session.mount('http://', adapter)
-    session.mount('https://', adapter)
+    try:
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
 
-    if method == 'GET':
-        return session.get(url, headers=headers)
-    else:
-        return session.post(url, headers=headers, data=data)
+        if method == 'GET':
+            return session.get(url, headers=headers)
+        else:
+            return session.post(url, headers=headers, data=data)
+    
+    except Exception as e:
+        logger.exception('bluetooth crashed. Error: %s', e)
 
 def getEntries(state, db):
     resp = req('/api/v1/entries.json', '', 'GET')
