@@ -56,13 +56,13 @@ class AsyncTask:
 
     def __init__(self):
         self.cond = threading.Condition()
-        self.interval = 30
 
     def bluetooth(self):
         try:
             while True:
                 btutil.listen(_state, self.cond)
                 time.sleep(2)
+
         except Exception as e:
             logger.exception('bluetooth crashed. Error: %s', e)
 
@@ -77,6 +77,7 @@ class AsyncTask:
 
                 with self.cond:
                     self.cond.wait()     
+
          except Exception as e:
             logger.exception('process crashed. Error: %s', e)       
 
@@ -85,16 +86,19 @@ class AsyncTask:
             while True:
                 _state.sleep()
                 
-                with self.cond:               
-                    self.cond.notifyAll()
+               self.cond.notifyAll()
+
          except Exception as e:
             logger.exception('notifier crashed. Error: %s', e)
 
     def keyHandler(self):
         try:
             while True:
-            if not GPIO.input(KEY1_PIN):
-                _state.setKeyState(KEY1_PIN)
+                if not GPIO.input(KEY1_PIN):
+                    _state.setKeyState(KEY1_PIN)
+
+                time.sleep(1)
+
          except Exception as e:
             logger.exception('keyHandler crashed. Error: %s', e)
        

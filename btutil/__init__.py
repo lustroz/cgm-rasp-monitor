@@ -3,6 +3,7 @@ import os
 import logging
 import wifi
 import time
+import setting
 
 logger = logging.getLogger('cgm')
 
@@ -15,6 +16,10 @@ def handleData(clientSock, data):
 
     cmd = arr[0]
     param = arr[1]
+
+    if cmd == b'settings':
+        result = setting.getCurrent()
+        clickSock.send(b'settings:' + result)
 
     if cmd == b'wifi_list':
         output = wifi.getApList().encode()
