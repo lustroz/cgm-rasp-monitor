@@ -78,7 +78,7 @@ class AsyncTask:
                 with self.cond:
                     self.cond.wait()     
 
-         except Exception as e:
+        except Exception as e:
             logger.exception('process crashed. Error: %s', e)       
 
     def notifier(self):
@@ -88,7 +88,7 @@ class AsyncTask:
                 
                self.cond.notifyAll()
 
-         except Exception as e:
+        except Exception as e:
             logger.exception('notifier crashed. Error: %s', e)
 
     def keyHandler(self):
@@ -99,7 +99,7 @@ class AsyncTask:
 
                 time.sleep(1)
 
-         except Exception as e:
+        except Exception as e:
             logger.exception('keyHandler crashed. Error: %s', e)
        
 try:
