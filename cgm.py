@@ -5,6 +5,7 @@ import database
 import time
 import oled
 import btutil
+import os
 import logging
 import logging.handlers
 import asyncio
@@ -27,6 +28,8 @@ logger.addHandler(streamHandler)
 
 _state = state.State()
 _data = data.Data()
+
+startTime = time.time()
 
 #GPIO define
 RST_PIN        = 25
@@ -77,6 +80,11 @@ class AsyncTask:
 
                 with self.cond:
                     self.cond.wait()     
+
+                # reboot automatically after 24 hour.
+                elapsed = time.time() - startTime
+                if elapsed > 24 * 60 * 60:
+                    os.system('shutdown -r now')
 
         except Exception as e:
             logger.exception('process crashed. Error: %s', e)       
