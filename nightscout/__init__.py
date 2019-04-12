@@ -29,10 +29,13 @@ def req(path, query, method, data={}):
             return session.post(url, headers=headers, data=data)
     
     except Exception as e:
-        logger.exception('bluetooth crashed. Error: %s', e)
+        logger.exception('request crashed. Error: %s', e)
 
 def getEntries(state, db):
     resp = req('/api/v1/entries.json', '', 'GET')
+    if resp is None:
+        return
+
     parsed = json.loads(resp.text)
     # logger.info(json.dumps(parsed, indent=4, sort_keys=True))
     for entry in parsed:
