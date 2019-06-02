@@ -11,10 +11,9 @@ class Data:
        return
 
     def fetchData(self, state, db):
-        #if wifi.checkNetwork():
+        if wifi.checkNetwork():
             nightscout.getEntries(state, db)
-                
-        #else:
-        #    state.setState(state.NoInternet)
+        else:
+            state.setState(state.NoInternet)
             
         

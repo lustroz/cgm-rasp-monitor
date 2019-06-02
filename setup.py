@@ -1,12 +1,12 @@
 from setuptools import setup
 
 setup(
-    name='cgm-rasp-monitor',
+    name='pharus',
     version='1.0',
     description='',
     license='MIT',
     author='do',
-    author_email='dolucy.dev@gmail.com',
-    packages=['cgm-rasp-monitor'],
+    author_email='lustro0@gmail.com',
+    packages=['pharus'],
     install_requires=['requests'],
 )

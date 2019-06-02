@@ -59,12 +59,13 @@ def listen(state, cond):
     clientSock, clientInfo = serverSock.accept()
     logger.info("accepted")
 
+    state.setState(state.BluetoothConnected)
+
     while True:
         try:
             data = clientSock.recv(1024)
             if len(data) == 0: continue
-
-            state.setState(state.BluetoothCommand)
+           
             handleData(clientSock, data)
 
             with cond:
@@ -74,12 +75,14 @@ def listen(state, cond):
             print("disconnected")
             clientSock.close()
             serverSock.close()
+            state.setState(state.Unknown)
             return
 
         except KeyboardInterrupt:
             print("disconnected")
             clientSock.close()
             serverSock.close()
+            state.setState(state.Unknown)
             return
         
         time.sleep(1)
