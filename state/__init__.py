@@ -41,7 +41,10 @@ class State:
 
             delta = time.time() - self.settleTime
             if delta > 1:
-                self.state = State.DisplayValue
+                if self.state == State.Unknown:
+                    self.state = State.DisplayValue
+                else:
+                    self.state = State.BluetoothConnected 
 
     def setKeyState(self, key):
         with self.lock:

@@ -11,18 +11,24 @@ def handleData(clientSock, data):
     logger.info("received [%s]" % data)
 
     arr = data.split(b':')
-    if len(arr) < 2:
+    if len(arr) < 1:
         return
 
     cmd = arr[0]
-    param = arr[1]
+
+    count = arr[0].decode('utf-8')
+    if count.isdigit():
+        argc = int(count)
+        if argc > 1:
+            cmd = arr[1]
+            param = arr[2:]            
 
     if cmd == b'settings':
-        result = setting.getCurrent()
-        clickSock.send(b'settings:' + result)
+        result = setting.getCurrent().encode('utf-8')
+        clientSock.send(b'settings:' + result)
 
     if cmd == b'wifi_list':
-        output = wifi.getApList().encode()
+        output = wifi.getApList().encode('utf-8')
         clientSock.send(b'wifi_list:' + output)
 
     elif cmd == b'connect_wifi':
@@ -56,7 +62,7 @@ def listen(state, cond):
     advertise_service(serverSock, "CgmMonitor", service_id = uuid, service_classes = [ uuid, SERIAL_PORT_CLASS ], profiles = [ SERIAL_PORT_PROFILE ])
     logger.info("Waiting for connection : channel %d" % port)
     
-    clientSock, clientInfo = serverSock.accept()
+    clientSock, _ = serverSock.accept()
     logger.info("accepted")
 
     state.setState(state.BluetoothConnected)
@@ -64,26 +70,21 @@ def listen(state, cond):
     while True:
         try:
             data = clientSock.recv(1024)
-            if len(data) == 0: continue
+            if len(data) == 0: 
+                continue
            
             handleData(clientSock, data)
 
             with cond:
                 cond.notifyAll()
 
-        except IOError:
-            print("disconnected")
-            clientSock.close()
-            serverSock.close()
-            state.setState(state.Unknown)
-            return
-
         except KeyboardInterrupt:
-            print("disconnected")
+            logger.info("disconnected")
             clientSock.close()
             serverSock.close()
-            state.setState(state.Unknown)
             return
         
         time.sleep(1)
+
+    state.setState(state.Unknown)
                                              
