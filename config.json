@@ -1,8 +1,9 @@
 {
-    "ap_name": "",
+    "ssid": "",
     "source_type": "nightscout",
-    "addr": "",
-    "pass": "",
+    "ns_addr": "",
+    "ds_addr": "",
+    "ds_pass": "",
     "low_alarm": 80,
     "high_alarm": 170,
     "no_signal_alarm_min": 15

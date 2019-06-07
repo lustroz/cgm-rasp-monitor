@@ -7,6 +7,7 @@ import logging
 from threading import Lock
 import os
 import define
+import setting
 
 logger = logging.getLogger('cgm')
 
@@ -15,12 +16,21 @@ emergencyInterval = 1
 
 class State:
     Unknown = 0
+
     NoInternet = 1
-    BluetoothConnected = 2
-    DisplayValue = 10
+    DisplayValue = 2
+
+    BT_Connected    = 100
+    BT_SetupWifi    = 101
+    BT_Reboot       = 102
+    BT_SourceChange = 103
+    BT_NightScout   = 104
+    BT_DexcomShare  = 105
 
     def __init__(self):
         self.state = State.Unknown
+        self.cmdState = State.Unknown
+
         self.emergency = False
         self.dimmed = False
         self.settleTime = 0
@@ -30,21 +40,20 @@ class State:
     def setState(self, s):
         with self.lock:
             self.state = s
+
+    def setCmdState(self, s):
+        with self.lock:
+            self.cmdState = s
             self.settleTime = time.time()
 
     def restoreState(self):
         with self.lock:
-            if self.state == State.DisplayValue:
-                return
-            if self.state == State.BluetoothConnected:
+            if self.cmdState == State.Unknown or self.cmdState == State.BT_Connected: 
                 return
 
             delta = time.time() - self.settleTime
-            if delta > 1:
-                if self.state == State.Unknown:
-                    self.state = State.DisplayValue
-                else:
-                    self.state = State.BluetoothConnected 
+            if delta > 2:
+                self.cmdState = State.BT_Connected
 
     def setKeyState(self, key):
         with self.lock:
@@ -54,15 +63,46 @@ class State:
     def process(self, db):
         with self.lock:
             s = self.state
+            cs = self.cmdState
 
         # logger.info('process')
-        if s == State.NoInternet:
-            oled.drawState('No Internet')
 
-        elif s == State.BluetoothConnected:
+        if cs == State.BT_Connected:
+            logger.info('bt connected')
             oled.drawState('Bluetooth\nConnected')
 
+        elif cs == State.BT_SetupWifi:
+            logger.info('bt wifi')
+            oled.drawState('Setup Wifi')
+
+        elif cs == State.BT_Reboot:
+            logger.info('bt reboot')
+            oled.drawState('Reboot')
+
+        elif cs == State.BT_SourceChange:
+            logger.info('bt source_change')
+            oled.drawState('Source Change')
+
+        elif cs == State.BT_NightScout:
+            logger.info('bt nightscout')
+            oled.drawState('NightScout\nAddress')
+
+        elif cs == State.BT_DexcomShare:
+            logger.info('bt dexcomshare')
+            oled.drawState('DexcomShare\nAddress')
+
+        elif s == State.NoInternet:
+            logger.info('no internet')
+            oled.drawState('No Internet')
+
         elif s == State.DisplayValue:
+            srcType = setting.getSourceType()
+            if srcType == 'nightscout':
+                addr = setting.getNSAddress()
+            else:
+                addr = setting.getDSAddress()
+
+            logger.info('display value {0} {1}'.format(srcType, addr))
             rows = db.fetchEntries()
 
             if len(rows) > 1:
@@ -78,7 +118,7 @@ class State:
                 elapsed = int(time.time()) - latest[2] / 1000                
 
                 with self.lock:
-                    if val < 80 or val > 170 or (elapsed / 60) > 15:
+                    if val < setting.getLowAlarm() or val > setting.getHighAlarm() or (elapsed / 60) > setting.getNoSignalAlarm():
                         self.emergency = True
 
                         if self.dimmed:
@@ -103,12 +143,12 @@ class State:
                 self.shouldReboot = False
 
     def sleep(self):
-        with self.lock:
-            e = self.emergency
+        # with self.lock:
+        #     e = self.emergency
 
-        if e:
+        # if e:
             time.sleep(emergencyInterval)
-        else:
-            time.sleep(defaultInterval)
+        # else:
+        #     time.sleep(defaultInterval)
 
 

@@ -3,13 +3,18 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import simplejson as json
 import logging
+import setting
 
 logger = logging.getLogger('cgm')
 
-API_HOST = 'http://ns.dolucy.com:9237'
+API_HOST = ''
 headers = {'Authorization': 'Bearer '}
 
 def req(path, query, method, data={}):
+    API_HOST = setting.getNSAddress() 
+    if API_HOST == '':
+        return
+        
     url = API_HOST + path
     # print('HTTP Method: %s' % method)
     # print('Request URL: %s' % url)

@@ -2,16 +2,17 @@ import subprocess
 import requests
 import logging
 import sys
+import os
+import socket
+import urllib
 
 logger = logging.getLogger('cgm')
 
 def checkNetwork():
-    url = 'https://www.google.com/'
-    timeout = 5
-    try:
-        _ = requests.get(url, timeout=timeout)
+    addr = subprocess.check_output(['hostname', '-I']).decode('utf-8')
+    if len(addr) > 7:
         return True
-    except OSError:
+    else:
         return False
 
 def getApList():
@@ -24,6 +25,8 @@ def getApList():
     return result
 
 def connect(ssid, password):
-    subprocess.check_call('wpa_passphrase "'+ssid+'" '+password+' >> /etc/wpa_supplicant/wpa_supplicant.conf', universal_newlines=True)
+    os.system('wpa_passphrase "'+ssid+'" "'+password+'" >> /etc/wpa_supplicant/wpa_supplicant.conf')
+    os.system('systemctl daemon-reload')
+    os.system('systemctl restart dhcpcd')
 
 
