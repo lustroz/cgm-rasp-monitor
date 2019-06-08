@@ -12,38 +12,40 @@ headers = {'Authorization': 'Bearer '}
 
 def req(path, query, method, data={}):
     API_HOST = setting.getNSAddress() 
-    if API_HOST == '':
-        return
-        
+
     url = API_HOST + path
-    # print('HTTP Method: %s' % method)
-    # print('Request URL: %s' % url)
-    # print('Headers: %s' % headers)
-    # print('QueryString: %s' % query)
 
-    try:
-        session = requests.Session()
-        retry = Retry(connect=3, backoff_factor=0.5)
-        adapter = HTTPAdapter(max_retries=retry)
-        session.mount('http://', adapter)
-        session.mount('https://', adapter)
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
 
-        if method == 'GET':
-            return session.get(url, headers=headers)
-        else:
-            return session.post(url, headers=headers, data=data)
-    
-    except Exception as e:
-        logger.exception('request crashed. Error: %s', e)
+    if method == 'GET':
+        return session.get(url, headers=headers)
+    else:
+        return session.post(url, headers=headers, data=data)
 
 def getEntries(state, db):
-    resp = req('/api/v1/entries.json', '', 'GET')
-    if resp is None:
-        return
+    try:
+        resp = req('/api/v1/entries.json', '', 'GET')
+        if resp is None:
+            return
 
-    parsed = json.loads(resp.text)
-    # logger.info(json.dumps(parsed, indent=4, sort_keys=True))
-    for entry in parsed:
-        if entry['type'] == 'sgv':
-            db.insertEntry('nightscout', entry['date'], entry['sgv'], entry['direction'])
+        parsed = json.loads(resp.text)
+        for entry in parsed:
+            if entry['type'] == 'sgv':
+                db.insertEntry('nightscout', entry['date'], entry['sgv'], entry['direction'])
+
+        state.setState(state.DisplayValue)
+    
+    except Exception as e:
+        logger.exception('request crashed. Error: %s', e)    
+
+        if API_HOST == '':
+            state.setState(state.InvalidParam)
+
+    
+
+    
     

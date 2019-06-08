@@ -31,7 +31,9 @@ def handleData(clientSock, data, state):
     elif cmd == b'connect_wifi':
         state.setCmdState(state.BT_SetupWifi)
         phrase = param.split(b';')
-        wifi.connect(phrase[0].decode('utf-8'), phrase[1].decode('utf-8'))
+        ssid = phrase[0].decode('utf-8')
+        wifi.connect(ssid, phrase[1].decode('utf-8'))
+        setting.setSSID(ssid)
         os.system('reboot')
     
     elif cmd == b'reboot':
@@ -52,7 +54,7 @@ def handleData(clientSock, data, state):
         if len(phrase) < 2:
             return
 
-        setting.setDSAddress(phrase[0].decode('utf-8'))
+        setting.setDSUsername(phrase[0].decode('utf-8'))
         setting.setDSPassword(phrase[1].decode('utf-8'))
 
 def listen(state, cond):

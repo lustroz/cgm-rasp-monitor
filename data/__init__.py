@@ -3,6 +3,10 @@ import nightscout
 import time
 import wifi
 import setting
+import dexcomshare
+
+lastFetchTime = 0
+fetchPeriod = 60
 
 class Data:
     def __init__(self):
@@ -10,13 +14,22 @@ class Data:
 
     def fetchData(self, state, db):
         
-        if wifi.checkNetwork():
-            state.setState(state.DisplayValue)
+        if wifi.checkNetwork():           
+
+            global lastFetchTime
+
+            curTime = int(time.time())
+            if curTime - lastFetchTime < fetchPeriod:
+                return
+
             src = setting.getSourceType()
             if src == 'nightscout':
                 nightscout.getEntries(state, db)
             elif src == 'dexcomshare':
-                pass
+                dexcomshare.getEntries(state, db)
+
+            lastFetchTime = curTime
+
         else:
             state.setState(state.NoInternet)
             

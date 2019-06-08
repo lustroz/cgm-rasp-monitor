@@ -11,7 +11,7 @@ import setting
 
 logger = logging.getLogger('cgm')
 
-defaultInterval = 30
+defaultInterval = 5
 emergencyInterval = 1
 
 class State:
@@ -19,6 +19,7 @@ class State:
 
     NoInternet = 1
     DisplayValue = 2
+    InvalidParam = 3
 
     BT_Connected    = 100
     BT_SetupWifi    = 101
@@ -65,44 +66,44 @@ class State:
             s = self.state
             cs = self.cmdState
 
-        # logger.info('process')
+        srcType = setting.getSourceType()
+        if srcType == 'nightscout':
+            srcName = 'NightScout'
+        else:
+            srcName = 'DexcomShare'
 
         if cs == State.BT_Connected:
-            logger.info('bt connected')
+            #logger.info('bt connected')
             oled.drawState('Bluetooth\nConnected')
 
         elif cs == State.BT_SetupWifi:
-            logger.info('bt wifi')
+            #logger.info('bt wifi')
             oled.drawState('Setup Wifi')
 
         elif cs == State.BT_Reboot:
-            logger.info('bt reboot')
+            #logger.info('bt reboot')
             oled.drawState('Reboot')
 
         elif cs == State.BT_SourceChange:
-            logger.info('bt source_change')
+            #logger.info('bt source_change')
             oled.drawState('Source Change')
 
         elif cs == State.BT_NightScout:
-            logger.info('bt nightscout')
+            #logger.info('bt nightscout')
             oled.drawState('NightScout\nAddress')
 
         elif cs == State.BT_DexcomShare:
-            logger.info('bt dexcomshare')
+            #logger.info('bt dexcomshare')
             oled.drawState('DexcomShare\nAddress')
 
         elif s == State.NoInternet:
-            logger.info('no internet')
+            #logger.info('no internet')
             oled.drawState('No Internet')
 
-        elif s == State.DisplayValue:
-            srcType = setting.getSourceType()
-            if srcType == 'nightscout':
-                addr = setting.getNSAddress()
-            else:
-                addr = setting.getDSAddress()
+        elif s == State.InvalidParam:
+            oled.drawState(srcName + '\nInvalid Parameter')
 
-            logger.info('display value {0} {1}'.format(srcType, addr))
+        elif s == State.DisplayValue:
             rows = db.fetchEntries()
 
             if len(rows) > 1:
@@ -130,7 +131,7 @@ class State:
                     else:
                         self.emergency = False
 
-                oled.draw(latest[1], elapsed, val, latest[4], delta, color)
+                oled.draw(srcType, elapsed, val, latest[4], delta, color)
 
         else: 
             oled.drawState('Unknown')

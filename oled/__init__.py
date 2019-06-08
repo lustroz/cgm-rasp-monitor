@@ -35,7 +35,7 @@ def draw(source, elapsed, value, direction, delta, color):
     top = -2
 
     if source == 'nightscout':
-        src = 'Nightscout'
+        src = 'NightScout'
     else:
         src = 'DexcomShare'
 

@@ -10,14 +10,22 @@ def getCurrent():
         ssid = config['ssid']
         sourceType = config['source_type']
         ns_addr = config['ns_addr']
-        ds_addr = config['ds_addr']
+        ds_addr = config['ds_user']
         ds_pass = config['ds_pass']
         lowAlarm = config['low_alarm']
         highAlarm = config['high_alarm']
         noSigAlarm = config['no_signal_alarm_min']
-        return 'ssid={0};source={1};ns_addr={2};ds_addr={3};ds_pass={4};low={5};high={6};no_sig={7}'.format(ssid, sourceType, ns_addr, ds_addr, ds_pass, lowAlarm, highAlarm, noSigAlarm)
+        return 'ssid={0};source={1};ns_addr={2};ds_user={3};ds_pass={4};low={5};high={6};no_sig={7}'.format(ssid, sourceType, ns_addr, ds_user, ds_pass, lowAlarm, highAlarm, noSigAlarm)
 
     return ''
+
+def setSSID(ssid):
+    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
+        config = json.load(f)
+        config['ssid'] = ssid
+
+        with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
+            json.dump(config, of)
 
 def getSourceType():
     with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
@@ -49,20 +57,27 @@ def setNSAddress(addr):
         with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
             json.dump(config, of)
 
-def getDSAddress():
+def getDSUsername():
     with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
         config = json.load(f)
-        return config['ds_addr']
+        return config['ds_user']
 
     return ''
 
-def setDSAddress(addr):
+def setDSUsername(username):
     with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
         config = json.load(f)
-        config['ds_addr'] = addr
+        config['ds_user'] = username
         
         with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
             json.dump(config, of)
+
+def getDSPassword():
+    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
+        config = json.load(f)
+        return config['ds_pass']
+
+    return ''
 
 def setDSPassword(password):
     with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
