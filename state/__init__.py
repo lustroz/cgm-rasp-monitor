@@ -29,6 +29,7 @@ class State:
     BT_DexcomShare  = 105
     BT_TelegramBot  = 106
     BT_AlarmValue   = 107
+    BT_HostName     = 108
 
     def __init__(self):
         self.state = State.Unknown
@@ -74,26 +75,8 @@ class State:
         else:
             srcName = 'DexcomShare'
 
-        if cs == State.BT_Connected:
-            oled.drawState('Bluetooth\nConnected')
-
-        elif cs == State.BT_SetupWifi:
-            oled.drawState('Setup Wifi')
-
-        elif cs == State.BT_Reboot:
-            oled.drawState('Reboot')
-
-        elif cs == State.BT_SourceChange:
-            oled.drawState('Source Change')
-
-        elif cs == State.BT_NightScout:
-            oled.drawState('NightScout\nAddress')
-
-        elif cs == State.BT_DexcomShare:
-            oled.drawState('DexcomShare\nAddress')
-
-        elif cs == State.BT_TelegramBot:
-            oled.drawState('Telegram Bot')
+        if self.displayCommand(cs):
+            pass        
 
         elif s == State.NoInternet:
             oled.drawState('No Internet')
@@ -130,6 +113,30 @@ class State:
             if self.shouldReboot:
                 os.system("shutdown -r now")
                 self.shouldReboot = False
+
+    def displayCommand(self, cmdState):
+        if cmdState == State.BT_Connected:
+            oled.drawState('Bluetooth\nConnected')
+        elif cmdState == State.BT_SetupWifi:
+            oled.drawState('Setup Wifi')
+        elif cmdState == State.BT_Reboot:
+            oled.drawState('Reboot')
+        elif cmdState == State.BT_SourceChange:
+            oled.drawState('Source Change')
+        elif cmdState == State.BT_NightScout:
+            oled.drawState('NightScout\nAddress')
+        elif cmdState == State.BT_DexcomShare:
+            oled.drawState('DexcomShare\nAddress')
+        elif cmdState == State.BT_TelegramBot:
+            oled.drawState('Telegram Bot')
+        elif cmdState == State.BT_TelegramBot:
+            oled.drawState('Telegram Bot')
+        elif cmdState == State.BT_HostName:
+            oled.drawState('Set HostName')
+        else:
+            return False
+
+        return True
 
     def sleep(self):
         # with self.lock:

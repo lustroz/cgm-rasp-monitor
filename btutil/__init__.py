@@ -71,6 +71,10 @@ def handleData(clientSock, data, state):
             return
         setting.setTelegramBot(phrase[0].decode('utf-8'), phrase[1].decode('utf-8'))
 
+    elif cmd == b'hostname_set':
+        state.setCmdState(state.BT_HostName)
+        os.system('hostnamectl set-hostname ' + param.decode('utf-8'))
+        os.system('reboot')
 
 def listen(state, cond):
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"
