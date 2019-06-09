@@ -1,12 +1,11 @@
 import telegram
 import logging
+import setting
 
 logger = logging.getLogger('cgm')
 
-TOKEN = '790737403:AAFRd5rwdyOA0wP6XOgBo50Zs_Ga70l0bu0'
-
 def sendLatestEntry(db):
-    bot = telegram.Bot(token = TOKEN)
+    bot = telegram.Bot(token = setting.getTGBotToken())
     updates = bot.getUpdates()
     if len(updates) == 0:
         return
@@ -27,6 +26,6 @@ def sendLatestEntry(db):
 
     m = int(r['elapsed'] / 60)
 
-    msg = '혈당: {2}\n\n지난 시간: {0} 분\n변동: {1}\n방향성: {3}'.format(m, r['delta'], r['val'], r['direction'])
+    msg = '혈당: {2}\n\n지난 시간: {0} 분\n변동량: {1}\n방향성: {3}'.format(m, r['delta'], r['val'], r['direction'])
     bot.sendMessage(chat_id = chatId, text = msg)
     

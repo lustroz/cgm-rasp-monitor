@@ -57,6 +57,10 @@ def handleData(clientSock, data, state):
         setting.setDSUsername(phrase[0].decode('utf-8'))
         setting.setDSPassword(phrase[1].decode('utf-8'))
 
+    elif cmd == b'tg_bot_token':
+        state.setCmdState(state.BT_TGBotToken)
+        setting.setTGBotToken(param.decode('utf-8'))
+
 def listen(state, cond):
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"
     

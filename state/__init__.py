@@ -27,6 +27,7 @@ class State:
     BT_SourceChange = 103
     BT_NightScout   = 104
     BT_DexcomShare  = 105
+    BT_TGBotToken   = 106
 
     def __init__(self):
         self.state = State.Unknown
@@ -73,31 +74,27 @@ class State:
             srcName = 'DexcomShare'
 
         if cs == State.BT_Connected:
-            #logger.info('bt connected')
             oled.drawState('Bluetooth\nConnected')
 
         elif cs == State.BT_SetupWifi:
-            #logger.info('bt wifi')
             oled.drawState('Setup Wifi')
 
         elif cs == State.BT_Reboot:
-            #logger.info('bt reboot')
             oled.drawState('Reboot')
 
         elif cs == State.BT_SourceChange:
-            #logger.info('bt source_change')
             oled.drawState('Source Change')
 
         elif cs == State.BT_NightScout:
-            #logger.info('bt nightscout')
             oled.drawState('NightScout\nAddress')
 
         elif cs == State.BT_DexcomShare:
-            #logger.info('bt dexcomshare')
             oled.drawState('DexcomShare\nAddress')
 
+        elif cs == State.BT_TGBotToken:
+            oled.drawState('Telegram Bot\nToken')
+
         elif s == State.NoInternet:
-            #logger.info('no internet')
             oled.drawState('No Internet')
 
         elif s == State.InvalidParam:

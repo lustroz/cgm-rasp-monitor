@@ -15,7 +15,10 @@ def getCurrent():
         lowAlarm = config['low_alarm']
         highAlarm = config['high_alarm']
         noSigAlarm = config['no_signal_alarm_min']
-        return 'ssid={0};source={1};ns_addr={2};ds_user={3};ds_pass={4};low={5};high={6};no_sig={7}'.format(ssid, sourceType, ns_addr, ds_user, ds_pass, lowAlarm, highAlarm, noSigAlarm)
+        tgBotToken = config['tg_bot_token']
+
+        text = 'ssid={0};source={1};ns_addr={2};ds_user={3};ds_pass={4};low={5};high={6};no_sig={7};tg_bot_token={8}'
+        return text.format(ssid, sourceType, ns_addr, ds_user, ds_pass, lowAlarm, highAlarm, noSigAlarm, tgBotToken)
 
     return ''
 
@@ -107,4 +110,19 @@ def getNoSignalAlarm():
         return config['no_signal_alarm_min']
 
     return 15
+
+def getTGBotToken():
+    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
+        config = json.load(f)
+        return config['tg_bot_token']
+
+    return ''
+
+def setTGBotToken(password):
+    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
+        config = json.load(f)
+        config['tg_bot_token'] = password
+        
+        with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
+            json.dump(config, of)
 
