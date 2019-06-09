@@ -126,9 +126,7 @@ class State:
         elif cmdState == State.BT_NightScout:
             oled.drawState('NightScout\nAddress')
         elif cmdState == State.BT_DexcomShare:
-            oled.drawState('DexcomShare\nAddress')
-        elif cmdState == State.BT_TelegramBot:
-            oled.drawState('Telegram Bot')
+            oled.drawState('DexcomShare\nAccount')
         elif cmdState == State.BT_TelegramBot:
             oled.drawState('Telegram Bot')
         elif cmdState == State.BT_HostName:
