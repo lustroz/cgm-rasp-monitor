@@ -5,124 +5,70 @@ import os
 logger = logging.getLogger('cgm')
 
 def getCurrent():
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'r') as f:
-        config = json.load(f)
-        ssid = config['ssid']
-        sourceType = config['source_type']
-        ns_addr = config['ns_addr']
-        ds_addr = config['ds_user']
-        ds_pass = config['ds_pass']
-        lowAlarm = config['low_alarm']
-        highAlarm = config['high_alarm']
-        noSigAlarm = config['no_signal_alarm_min']
-        tgBotToken = config['tg_bot_token']
+    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
+        return json.load(f)
+    return None
 
-        text = 'ssid={0};source={1};ns_addr={2};ds_user={3};ds_pass={4};low={5};high={6};no_sig={7};tg_bot_token={8}'
-        return text.format(ssid, sourceType, ns_addr, ds_user, ds_pass, lowAlarm, highAlarm, noSigAlarm, tgBotToken)
+def save(config):
+    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
+        json.dump(config, of)      
 
-    return ''
+def getCurrentText():
+    config = getCurrent()
+    if config == None:
+        return ''
+
+    ssid = config['ssid']
+    sourceType = config['source_type']
+    ns_addr = config['ns_addr']
+    ds_addr = config['ds_user']
+    ds_pass = config['ds_pass']
+    lowAlarm = config['low_alarm']
+    highAlarm = config['high_alarm']
+    noSigAlarm = config['no_signal_alarm_min']
+    tgBotToken = config['tg_bot_token']
+
+    text = 'ssid={0};source={1};ns_addr={2};ds_user={3};ds_pass={4};low={5};high={6};no_sig={7};tg_bot_token={8}'
+    return text.format(ssid, sourceType, ns_addr, ds_user, ds_pass, lowAlarm, highAlarm, noSigAlarm, tgBotToken)
 
 def setSSID(ssid):
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        config['ssid'] = ssid
-
-        with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
-            json.dump(config, of)
+    config = getCurrent()
+    config['ssid'] = ssid
+    save(config)              
 
 def getSourceType():
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        return config['source_type']
-
-    return 'nightscout'
+    config = getCurrent()
+    return config['source_type']
 
 def setSourceType(source):
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        config['source_type'] = source
-
-        with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
-            json.dump(config, of)
-
-def getNSAddress():
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        return config['ns_addr']
-
-    return ''
+    config = getCurrent()
+    config['source_type'] = source
+    save(config)
 
 def setNSAddress(addr):
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        config['ns_addr'] = addr
-
-        with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
-            json.dump(config, of)
-
-def getDSUsername():
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        return config['ds_user']
-
-    return ''
+    config = getCurrent()
+    config['ns_addr'] = addr
+    save(config)
 
 def setDSUsername(username):
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        config['ds_user'] = username
-        
-        with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
-            json.dump(config, of)
-
-def getDSPassword():
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        return config['ds_pass']
-
-    return ''
+    config = getCurrent()
+    config['ds_user'] = username
+    save(config)
 
 def setDSPassword(password):
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        config['ds_pass'] = password
-        
-        with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
-            json.dump(config, of)
+    config = getCurrent()
+    config['ds_pass'] = password
+    save(config)
 
-def getLowAlarm():
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        return config['low_alarm']
-
-    return 80
-
-def getHighAlarm():
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        return config['high_alarm']
-
-    return 170
-
-def getNoSignalAlarm():
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        return config['no_signal_alarm_min']
-
-    return 15
-
-def getTGBotToken():
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        return config['tg_bot_token']
-
-    return ''
+def setAlarmValues(low, high, noSignal):
+    config = getCurrent()
+    config['low_alarm'] = low
+    config['high_alarm'] = high
+    config['no_signal_alarm_min'] = noSignal
+    save(config)
 
 def setTGBotToken(password):
-    with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'rt') as f:
-        config = json.load(f)
-        config['tg_bot_token'] = password
-        
-        with open(os.path.dirname(os.path.abspath(__file__)) + '/../config.json', 'wt') as of:
-            json.dump(config, of)
+    config = getCurrent()
+    config['tg_bot_token'] = password
+    save(config)
 

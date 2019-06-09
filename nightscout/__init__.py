@@ -11,7 +11,9 @@ API_HOST = ''
 headers = {'Authorization': 'Bearer '}
 
 def req(path, query, method, data={}):
-    API_HOST = setting.getNSAddress() 
+    config = setting.getCurrent()
+    
+    API_HOST = config['ds_addr']
 
     url = API_HOST + path
 

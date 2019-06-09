@@ -5,7 +5,9 @@ import setting
 logger = logging.getLogger('cgm')
 
 def sendLatestEntry(db):
-    bot = telegram.Bot(token = setting.getTGBotToken())
+    config = setting.getCurrent()
+    
+    bot = telegram.Bot(token = config['tg_bot_token'])
     updates = bot.getUpdates()
     if len(updates) == 0:
         return

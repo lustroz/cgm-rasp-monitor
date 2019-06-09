@@ -28,6 +28,7 @@ class State:
     BT_NightScout   = 104
     BT_DexcomShare  = 105
     BT_TGBotToken   = 106
+    BT_AlarmValue   = 107
 
     def __init__(self):
         self.state = State.Unknown
@@ -105,7 +106,8 @@ class State:
             if r['val'] > 0:
                 color = 255
                 with self.lock:
-                    if r['val'] < setting.getLowAlarm() or r['val'] > setting.getHighAlarm() or (r['elapsed'] / 60) > setting.getNoSignalAlarm():
+                    config = setting.getCurrent()
+                    if r['val'] < config['low_alarm'] or r['val'] > config['high_alarm'] or (r['elapsed'] / 60) > config['no_signal_alarm_min']:
                         self.emergency = True
 
                         if self.dimmed:
@@ -115,7 +117,7 @@ class State:
 
                         self.dimmed = not self.dimmed
                     else:
-                        self.emergency = False
+                        self.emergency = False                        
 
                 oled.draw(srcType, r['elapsed'], r['val'], r['direction'], r['delta'], color)
 

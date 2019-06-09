@@ -11,7 +11,7 @@ logger = logging.getLogger('cgm')
 API_HOST = 'https://shareous1.dexcom.com'
 headers = { 'User-Agent': 'Dexcom Share/3.0.2.11 CFNetwork/711.2.23 Darwin/14.0.0', 
             'Content-Type': 'application/json', 
-            'Accept': 'application/json' };
+            'Accept': 'application/json' }
 
 direction = {
     0: 'None',
@@ -58,11 +58,12 @@ def req(path, query, method, data={}):
         return session.post(url, headers=headers, data=data)
 
 def getEntries(state, db):
+    config = setting.getCurrent()
     try:
         param = {
             'applicationId': 'd89443d2-327c-4a6f-89e5-496bbb0317db',
-            'accountName': setting.getDSUsername(),
-            'password': setting.getDSPassword()         
+            'accountName': config['ds_user'],
+            'password': config['ds_pass']   
         }
 
         resp = req('/ShareWebServices/Services/General/LoginPublisherAccountByName', '', 'POST', json.dumps(param))
@@ -86,8 +87,9 @@ def getEntries(state, db):
     except Exception as e:
         logger.exception('request crashed. Error: %s', e)    
 
-        if setting.getDSUsername() == '' or setting.getDSPassword():
+        if config['ds_user'] == '' or config['ds_pass'] == '':
             state.setState(state.InvalidParam)
+       
 
     
 

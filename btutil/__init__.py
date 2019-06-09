@@ -21,7 +21,7 @@ def handleData(clientSock, data, state):
         param = b''       
 
     if cmd == b'settings':
-        result = setting.getCurrent().encode('utf-8')
+        result = setting.getCurrentText().encode('utf-8')
         clientSock.send(b'settings:' + result)
 
     if cmd == b'wifi_list':
@@ -56,6 +56,13 @@ def handleData(clientSock, data, state):
 
         setting.setDSUsername(phrase[0].decode('utf-8'))
         setting.setDSPassword(phrase[1].decode('utf-8'))
+
+    elif cmd == b'alarm_val':
+        state.setCmdState(state.BT_AlarmValue)
+        phrase = param.split(b';')
+        if len(phrase) < 3:
+            return
+        setting.setAlarmValues(phrase[0].decode('utf-8'), phrase[1].decode('utf-8'), phrase[2].decode('utf-8'))
 
     elif cmd == b'tg_bot_token':
         state.setCmdState(state.BT_TGBotToken)
