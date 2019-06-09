@@ -13,6 +13,7 @@ import threading
 import RPi.GPIO as GPIO
 import define
 import tgutil
+import setting
 
 logger = logging.getLogger('cgm')
 logger.setLevel(logging.DEBUG)
@@ -70,7 +71,8 @@ class AsyncTask:
                 _state.process(db)
 
                 curTime = int(time.time())
-                if curTime - lastSentTime > 300:
+                config = setting.getCurrent()
+                if curTime - lastSentTime > config['tg_bot_period']:
                     tgutil.sendLatestEntry(db)
                     lastSentTime = curTime
 

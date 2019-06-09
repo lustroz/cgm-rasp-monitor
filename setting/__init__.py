@@ -21,15 +21,16 @@ def getCurrentText():
     ssid = config['ssid']
     sourceType = config['source_type']
     ns_addr = config['ns_addr']
-    ds_addr = config['ds_user']
+    ds_user = config['ds_user']
     ds_pass = config['ds_pass']
     lowAlarm = config['low_alarm']
     highAlarm = config['high_alarm']
     noSigAlarm = config['no_signal_alarm_min']
     tgBotToken = config['tg_bot_token']
+    tgPeriod = config['tg_bot_period']
 
-    text = 'ssid={0};source={1};ns_addr={2};ds_user={3};ds_pass={4};low={5};high={6};no_sig={7};tg_bot_token={8}'
-    return text.format(ssid, sourceType, ns_addr, ds_user, ds_pass, lowAlarm, highAlarm, noSigAlarm, tgBotToken)
+    text = 'ssid={0};source={1};ns_addr={2};ds_user={3};ds_pass={4};low={5};high={6};no_sig={7};tg_bot_token={8};tg_bot_period={9}'
+    return text.format(ssid, sourceType, ns_addr, ds_user, ds_pass, lowAlarm, highAlarm, noSigAlarm, tgBotToken, tgPeriod)
 
 def setSSID(ssid):
     config = getCurrent()
@@ -67,8 +68,9 @@ def setAlarmValues(low, high, noSignal):
     config['no_signal_alarm_min'] = noSignal
     save(config)
 
-def setTGBotToken(password):
+def setTelegramBot(token, period):
     config = getCurrent()
-    config['tg_bot_token'] = password
+    config['tg_bot_token'] = token
+    config['tg_bot_period'] = period
     save(config)
 

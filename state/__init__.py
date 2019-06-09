@@ -27,7 +27,7 @@ class State:
     BT_SourceChange = 103
     BT_NightScout   = 104
     BT_DexcomShare  = 105
-    BT_TGBotToken   = 106
+    BT_TelegramBot  = 106
     BT_AlarmValue   = 107
 
     def __init__(self):
@@ -92,8 +92,8 @@ class State:
         elif cs == State.BT_DexcomShare:
             oled.drawState('DexcomShare\nAddress')
 
-        elif cs == State.BT_TGBotToken:
-            oled.drawState('Telegram Bot\nToken')
+        elif cs == State.BT_TelegramBot:
+            oled.drawState('Telegram Bot')
 
         elif s == State.NoInternet:
             oled.drawState('No Internet')

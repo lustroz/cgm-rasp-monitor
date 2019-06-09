@@ -64,9 +64,13 @@ def handleData(clientSock, data, state):
             return
         setting.setAlarmValues(phrase[0].decode('utf-8'), phrase[1].decode('utf-8'), phrase[2].decode('utf-8'))
 
-    elif cmd == b'tg_bot_token':
-        state.setCmdState(state.BT_TGBotToken)
-        setting.setTGBotToken(param.decode('utf-8'))
+    elif cmd == b'tg_bot_set':
+        state.setCmdState(state.BT_TelegramBot)
+        phrase = param.split(b';')
+        if len(phrase) < 2:
+            return
+        setting.setTelegramBot(phrase[0].decode('utf-8'), phrase[1].decode('utf-8'))
+
 
 def listen(state, cond):
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"
