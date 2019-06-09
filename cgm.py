@@ -12,6 +12,7 @@ import asyncio
 import threading
 import RPi.GPIO as GPIO
 import define
+import tgutil
 
 logger = logging.getLogger('cgm')
 logger.setLevel(logging.DEBUG)
@@ -62,9 +63,16 @@ class AsyncTask:
             db = database.Database()
             db.createTable()
 
+            lastSentTime = 0
+
             while True:
                 _data.fetchData(_state, db)
                 _state.process(db)
+
+                curTime = int(time.time())
+                if curTime - lastSentTime > 300:
+                    tgutil.sendLatestEntry(db)
+                    lastSentTime = curTime
 
                 with self.cond:
                     self.cond.wait()     
