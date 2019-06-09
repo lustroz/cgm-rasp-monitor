@@ -13,7 +13,7 @@ headers = {'Authorization': 'Bearer '}
 def req(path, query, method, data={}):
     config = setting.getCurrent()
     
-    API_HOST = config['ds_addr']
+    API_HOST = config['ns_addr']
 
     url = API_HOST + path
 
