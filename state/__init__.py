@@ -104,22 +104,11 @@ class State:
             oled.drawState(srcName + '\nInvalid Parameter')
 
         elif s == State.DisplayValue:
-            rows = db.fetchEntries()
-
-            if len(rows) > 1:
-                delta = rows[0][3] - rows[1][3]
-            else:
-                delta = 0
-
-            if len(rows) > 0:
-                latest = rows[0]
-                val = latest[3]
-
+            r = db.getDisplayValues()
+            if r['val'] > 0:
                 color = 255
-                elapsed = int(time.time()) - latest[2] / 1000                
-
                 with self.lock:
-                    if val < setting.getLowAlarm() or val > setting.getHighAlarm() or (elapsed / 60) > setting.getNoSignalAlarm():
+                    if r['val'] < setting.getLowAlarm() or r['val'] > setting.getHighAlarm() or (r['elapsed'] / 60) > setting.getNoSignalAlarm():
                         self.emergency = True
 
                         if self.dimmed:
@@ -131,7 +120,7 @@ class State:
                     else:
                         self.emergency = False
 
-                oled.draw(srcType, elapsed, val, latest[4], delta, color)
+                oled.draw(srcType, r['elapsed'], r['val'], r['direction'], r['delta'], color)
 
         else: 
             oled.drawState('Unknown')

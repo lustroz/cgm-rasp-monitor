@@ -1,4 +1,5 @@
 import sqlite3
+import time
 
 class Database:
     def __init__(self):
@@ -52,5 +53,25 @@ class Database:
         c.execute(sql)
         return c.fetchall()
 
+    def getDisplayValues(self):
+        rows = self.fetchEntries()
+
+        if len(rows) > 1:
+            delta = rows[0][3] - rows[1][3]
+        else:
+            delta = 0
+
+        if len(rows) == 0:
+            return {
+                'val': 0
+            }
+
+        latest = rows[0]
+        return {
+            'elapsed': int(time.time()) - latest[2] / 1000,
+            'val': latest[3],
+            'direction': latest[4],
+            'delta': delta
+        }
 
 
