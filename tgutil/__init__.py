@@ -7,30 +7,27 @@ logger = logging.getLogger('cgm')
 _chatId = 0
 
 def sendLatestEntry(db):
-    config = setting.getCurrent()
-    
-    bot = telegram.Bot(token = config['tg_bot_token'])
-    updates = bot.getUpdates()
-    if len(updates) == 0:
-        return
-
     r = db.getDisplayValues()
     if r['val'] == 0:
         return
 
-    latest = updates[-1]
-    # logger.info(latest)
+    config = setting.getCurrent()
+    
+    bot = telegram.Bot(token = config['tg_bot_token'])
+    updates = bot.getUpdates()
 
     global _chatId
-    
-    if latest.channel_post != None:
-        chatId = latest.channel_post.chat.id
-        _chatId = chatId
-    elif latest.message != None:
-        chatId = latest.message.chat.id
-        _chatId = chatId
-    else:
-        chatId = _chatId
+    chatId = _chatId
+
+    if len(updates) == 0:
+        latest = updates[-1]    
+
+        if latest.channel_post != None:
+            chatId = latest.channel_post.chat.id
+            _chatId = chatId
+        elif latest.message != None:
+            chatId = latest.message.chat.id
+            _chatId = chatId
 
     m = int(r['elapsed'] / 60)
 
