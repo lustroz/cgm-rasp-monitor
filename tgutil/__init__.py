@@ -17,7 +17,7 @@ def sendLatestEntry(db):
 
         chatId = config['tg_chat_id']        
 
-        if len(updates) == 0:
+        if len(updates) > 0:
             latest = updates[-1]    
 
             if latest.channel_post != None:
@@ -34,4 +34,5 @@ def sendLatestEntry(db):
     
     except Exception as e:
         pass
+        # logger.info(e)
     
