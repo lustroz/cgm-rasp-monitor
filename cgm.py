@@ -72,7 +72,14 @@ class AsyncTask:
 
                 curTime = int(time.time())
                 config = setting.getCurrent()
-                if curTime - lastSentTime > config['tg_bot_period']:
+
+                v = db.getDisplayValues()
+                if v['val'] > config['low_alarm'] and v['val'] < config['high_alarm']:
+                    period = config['tg_normal_period']
+                else:
+                    period = config['tg_urgent_period']
+
+                if curTime - lastSentTime > period:
                     tgutil.sendLatestEntry(db)
                     lastSentTime = curTime
 
