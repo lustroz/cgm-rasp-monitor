@@ -33,15 +33,15 @@ def sendLatestEntry(db):
 
         if d == 'DoubleUp':
             dir = '⮅'
-        else if d == 'SingleUp':
+        elif d == 'SingleUp':
             dir = '🡑'
-        else if d == 'FortyFiveUp':
+        elif d == 'FortyFiveUp':
             dir = '🡕'
-        else if d == 'FortyFiveDown':
+        elif d == 'FortyFiveDown':
             dir = '🡖'
-        else if d == 'SingleDown':
+        elif d == 'SingleDown':
             dir = '🡓'
-        else if d == 'DoubleDown':
+        elif d == 'DoubleDown':
             dir = '⮇'
         else:
             dir = '🡒'
