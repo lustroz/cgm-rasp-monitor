@@ -8,25 +8,30 @@ import setting
 logger = logging.getLogger('cgm')
 
 def handleData(clientSock, data, state):
-    logger.info("received [%s]" % data)
-
     arr = data.split(b'::')
     if len(arr) < 1:
         return
+
+    logger.info("received [%s]" % data)
 
     cmd = arr[0]
     if len(arr) > 1:
         param = arr[1]
     else:
-        param = b''       
+        param = b''      
 
-    if cmd == b'settings':
+    logger.info("cmd %s" % cmd)
+
+    if cmd == b'check':
+        clientSock.send(b'check::' + b'pass' + b'\n')
+
+    elif cmd == b'settings':
         result = setting.getCurrentText().encode('utf-8')
-        clientSock.send(b'settings:' + result)
+        clientSock.send(b'settings":' + result + b'\n')
 
-    if cmd == b'wifi_list':
+    elif cmd == b'wifi_list':
         output = wifi.getApList().encode('utf-8')
-        clientSock.send(b'wifi_list:' + output)
+        clientSock.send(b'wifi_list::' + output + b'\n')
 
     elif cmd == b'connect_wifi':
         state.setCmdState(state.BT_SetupWifi)
@@ -64,17 +69,9 @@ def handleData(clientSock, data, state):
             return
         setting.setAlarmValues(phrase[0].decode('utf-8'), phrase[1].decode('utf-8'), phrase[2].decode('utf-8'))
 
-    elif cmd == b'tg_bot_set':
-        state.setCmdState(state.BT_TelegramBot)
-        phrase = param.split(b';')
-        if len(phrase) < 2:
-            return
-        setting.setTelegramBot(phrase[0].decode('utf-8'), phrase[1].decode('utf-8'))
-
-    elif cmd == b'hostname_set':
-        state.setCmdState(state.BT_HostName)
-        os.system('hostnamectl set-hostname ' + param.decode('utf-8'))
-        os.system('reboot')
+    elif cmd == b'tg_bot_token':
+        state.setCmdState(state.BT_TGBotToken)
+        setting.setTGBotToken(param.decode('utf-8'))
 
 def listen(state, cond):
     uuid = "db9b08f1-8026-4477-98b8-a3555f801052"

@@ -53,6 +53,7 @@ class AsyncTask:
     def bluetooth(self):
         try:
             while True:
+                os.system('hciconfig hci0 piscan')
                 btutil.listen(_state, self.cond)
                 time.sleep(2)
 
@@ -79,7 +80,7 @@ class AsyncTask:
                 else:
                     period = config['tg_urgent_period']
 
-                if curTime - lastSentTime > period:
+                if curTime - lastSentTime > period * 60:
                     tgutil.sendLatestEntry(db)
                     lastSentTime = curTime
 

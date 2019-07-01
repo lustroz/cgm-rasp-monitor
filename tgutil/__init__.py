@@ -29,7 +29,24 @@ def sendLatestEntry(db):
 
         m = int(r['elapsed'] / 60)
 
-        msg = '혈당: {2}\n\n지난 시간: {0} 분\n변동량: {1}\n방향성: {3}'.format(m, r['delta'], r['val'], r['direction'])
+        d = r['direction']
+
+        if d == 'DoubleUp':
+            dir = '⮅'
+        else if d == 'SingleUp':
+            dir = '🡑'
+        else if d == 'FortyFiveUp':
+            dir = '🡕'
+        else if d == 'FortyFiveDown':
+            dir = '🡖'
+        else if d == 'SingleDown':
+            dir = '🡓'
+        else if d == 'DoubleDown':
+            dir = '⮇'
+        else:
+            dir = '🡒'
+
+        msg = '{2} {3}\n\n지난 시간: {0} 분\n변동량: {1}'.format(m, r['delta'], r['val'], dir)
         bot.sendMessage(chat_id = chatId, text = msg)
     
     except Exception as e:
