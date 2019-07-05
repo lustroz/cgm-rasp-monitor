@@ -32,19 +32,19 @@ def sendLatestEntry(db):
         d = r['direction']
 
         if d == 'DoubleUp':
-            dir = '⮅'
+            dir = '⏫'
         elif d == 'SingleUp':
-            dir = '🡑'
+            dir = '⬆️'
         elif d == 'FortyFiveUp':
-            dir = '🡕'
+            dir = '↗️'
         elif d == 'FortyFiveDown':
-            dir = '🡖'
+            dir = '↘️'
         elif d == 'SingleDown':
-            dir = '🡓'
+            dir = '⬇️'
         elif d == 'DoubleDown':
-            dir = '⮇'
+            dir = '⏬'
         else:
-            dir = '🡒'
+            dir = '➡️'
 
         msg = '{2} {3}\n\n지난 시간: {0} 분\n변동량: {1}'.format(m, r['delta'], r['val'], dir)
         bot.sendMessage(chat_id = chatId, text = msg)
