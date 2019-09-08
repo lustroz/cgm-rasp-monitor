@@ -56,7 +56,7 @@ def req(path, query, method, data={}):
     try:
         if method == 'GET':
             return session.get(url, headers=headers)
-         else:
+        else:
             return session.post(url, headers=headers, data=data)
     except:
         os.system('shutdown -r')
