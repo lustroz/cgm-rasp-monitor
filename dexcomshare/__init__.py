@@ -5,6 +5,7 @@ import simplejson as json
 import logging
 import setting
 import re
+import os
 
 logger = logging.getLogger('cgm')
 
@@ -52,10 +53,13 @@ def req(path, query, method, data={}):
     session.mount('http://', adapter)
     session.mount('https://', adapter)
 
-    if method == 'GET':
-        return session.get(url, headers=headers)
-    else:
-        return session.post(url, headers=headers, data=data)
+    try:
+        if method == 'GET':
+            return session.get(url, headers=headers)
+         else:
+            return session.post(url, headers=headers, data=data)
+    except:
+        os.system('shutdown -r')
 
 def getEntries(state, db):
     config = setting.getCurrent()
