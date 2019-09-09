@@ -20,7 +20,7 @@ class Data:
 
             curTime = int(time.time())
             if curTime - lastFetchTime < fetchPeriod:
-                return
+                return True
 
             src = setting.getSourceType()
             if src == 'nightscout':
@@ -30,7 +30,11 @@ class Data:
 
             lastFetchTime = curTime
 
+            return True
+
         else:
             state.setState(state.NoInternet)
+
+            return False
             
         

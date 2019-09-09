@@ -68,26 +68,29 @@ class AsyncTask:
             lastSentTime = 0
 
             while True:
-                _data.fetchData(_state, db)
-                _state.process(db)
+                if _data.fetchData(_state, db):
+                    _state.process(db)
 
-                curTime = int(time.time())
-                config = setting.getCurrent()
+                    curTime = int(time.time())
+                    config = setting.getCurrent()
 
-                v = db.getDisplayValues()
-                if v['val'] > config['low_alarm'] and v['val'] < config['high_alarm']:
-                    period = config['tg_normal_period']
+                    v = db.getDisplayValues()
+                    if v['val'] > config['low_alarm'] and v['val'] < config['high_alarm']:
+                        period = config['tg_normal_period']
+                    else:
+                        period = config['tg_urgent_period']
+
+                    if curTime - lastSentTime > period * 60:
+                        tgutil.sendLatestEntry(db)
+                        lastSentTime = curTime
+
                 else:
-                    period = config['tg_urgent_period']
-
-                if curTime - lastSentTime > period * 60:
-                    tgutil.sendLatestEntry(db)
-                    lastSentTime = curTime
+                     oled.drawState('No Internet')
 
                 with self.cond:
                     self.cond.wait()     
 
-                # reboot automatically once in every day..
+                # reboot automatically in every day..
                 elapsed = time.time() - startTime
                 if elapsed > 24 * 60 * 60:
                     os.system('shutdown -r now')
@@ -129,6 +132,8 @@ try:
     threads.append(t)
     t = threading.Thread(target=task.keyHandler)
     threads.append(t)
+
+    logger.info('pharus started...')
 
     for t in threads:
         t.start()
