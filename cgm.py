@@ -90,9 +90,9 @@ class AsyncTask:
                 with self.cond:
                     self.cond.wait()     
 
-                # reboot automatically in every day..
+                # reboot automatically in 3 hours..
                 elapsed = time.time() - startTime
-                if elapsed > 24 * 60 * 60:
+                if elapsed > 3 * 60 * 60:
                     os.system('shutdown -r now')
 
         except Exception as e:
