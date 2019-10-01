@@ -91,9 +91,9 @@ class AsyncTask:
                     self.cond.wait()     
 
                 # reboot automatically in 3 hours..
-                elapsed = time.time() - startTime
-                if elapsed > 3 * 60 * 60:
-                    os.system('shutdown -r now')
+                #elapsed = time.time() - startTime
+                #if elapsed > 3 * 60 * 60:
+                #    os.system('shutdown -r now')
 
         except Exception as e:
             logger.exception('process crashed. Error: %s', e)       
