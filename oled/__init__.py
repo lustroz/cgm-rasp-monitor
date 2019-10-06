@@ -12,6 +12,7 @@ from PIL import ImageDraw
 from PIL import ImageFont
 
 boldFont = ImageFont.truetype("Lato-Bold.ttf", 55)
+clockFont = ImageFont.truetype("Lato-Bold.ttf", 20)
 regularFont = ImageFont.truetype("Lato-Regular", 15)
 thinFont = ImageFont.truetype("Lato-Thin", 10)
 
@@ -51,7 +52,13 @@ def draw(source, elapsed, value, direction, delta, color):
     else:
         vX = x + 30
 
+    if int(time.time()) % 2 == 0:
+        clockClr = 255
+    else:
+        clockClr = 0
+
     with canvas(device) as draw:
+        draw.text((x, top), '*', font=clockFont, fill=clockClr)
         draw.text((x, top+10), str(int(elapsed / 60))+' m', font=regularFont, fill=color)
         draw.text((x, top+30), dStr, font=regularFont, fill=color)
         # draw.text((x+25, top+32), 'mg/dL', font=thinFont, fill=color)
