@@ -22,7 +22,9 @@ image = Image.new('1', (width, height))
 
 serial = spi(device=0, port=0, bus_speed_hz = 8000000, transfer_size = 4096, gpio_DC = 24, gpio_RST = 25)
 
-device = sh1106(serial, rotate=2) #sh1106  
+device = sh1106(serial, rotate=2) #sh1106 
+
+dimmed = False
 
 def drawState(text):
     x = 0
@@ -52,10 +54,14 @@ def draw(source, elapsed, value, direction, delta, color):
     else:
         vX = x + 30
 
-    if int(time.time()) % 2 == 0:
+    global dimmed
+
+    if dimmed:
         clockClr = 255
     else:
         clockClr = 0
+
+    dimmed = not dimmed
 
     with canvas(device) as draw:
         draw.text((x, top), '*', font=clockFont, fill=clockClr)
