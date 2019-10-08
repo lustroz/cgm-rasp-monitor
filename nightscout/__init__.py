@@ -30,7 +30,8 @@ def req(path, query, method, data={}):
         else:
             return session.post(url, headers=headers, data=data)
     except:
-        os.system('shutdown -r')
+        pass
+        #os.system('shutdown -r')
 
 def getEntries(state, db):
     try:
