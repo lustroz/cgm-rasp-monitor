@@ -14,6 +14,7 @@ import RPi.GPIO as GPIO
 import define
 import tgutil
 import setting
+import gc
 
 logger = logging.getLogger('cgm')
 logger.setLevel(logging.DEBUG)
@@ -105,6 +106,8 @@ class AsyncTask:
                 
                 with self.cond:
                     self.cond.notifyAll()
+
+                gc.collect()
 
         except Exception as e:
             logger.exception('notifier crashed. Error: %s', e)
