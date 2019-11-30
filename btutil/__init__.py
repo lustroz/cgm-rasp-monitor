@@ -27,7 +27,7 @@ def handleData(clientSock, data, state):
 
     elif cmd == b'settings':
         result = setting.getCurrentText().encode('utf-8')
-        clientSock.send(b'settings":' + result + b'\n')
+        clientSock.send(b'settings::' + result + b'\n')
 
     elif cmd == b'wifi_list':
         output = wifi.getApList().encode('utf-8')
